@@ -15,7 +15,15 @@ const AddEventForm = () => {
     const [venues, setVenues] = useState([]);
 
     useEffect(() => {
-        setVenues(getVenues());
+        const fetchVenues = async () => {
+            try {
+                const data = await getVenues();
+                setVenues(data);
+            } catch (error) {
+                console.error('Error fetching venues:', error);
+            }
+        };
+        fetchVenues();
     }, []);
 
     const handleChange = e => {
