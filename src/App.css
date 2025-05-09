@@ -46,7 +46,8 @@
 .tournament-wrapper {
   display: flex;
   align-items: flex-start;
-
+  height: 100%;
+  margin-top: 30px;
 }
 
 .tournament-left-blank {
@@ -54,11 +55,15 @@
 }
 
 .tournament-details {
-  width: 10%; 
+  width: 20%; 
   padding: 20px;
   background-color: #ffffff;
-  border-radius: 8px;
+  border-top-left-radius: 8px;
   margin-left: 10px;
+  background: #eaf9ff;
+  border-left: 1px solid #d3e2e8;
+  border-top: 1px solid #d3e2e8;
+  height: 800px;
 }
 
 .tournament-details-list {
@@ -78,7 +83,7 @@
 }
 
 .tournament-details-list-element h2 {
-  font-size: large;
+  font-size: 24px;
 }
 
 .tournament-details-list-element p, h2 {

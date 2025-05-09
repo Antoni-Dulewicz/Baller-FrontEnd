@@ -225,9 +225,9 @@ const SingleElimination = () => (
 const TournamentLadder = ({name, place, date}) => {
   return (
     <>
-      <div className="tournament-title">
+      {/* <div className="tournament-title">
         <h1>{name}</h1>
-      </div>
+      </div> */}
       <div className="tournament-wrapper">
         <div className="tournament-left-blank"></div>
         <div className="single-elimination-container">
