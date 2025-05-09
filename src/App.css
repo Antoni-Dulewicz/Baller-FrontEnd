@@ -36,3 +36,42 @@
     transform: rotate(360deg);
   }
 }
+
+.tournament-title {
+  font-family: 'Helvetica', sans-serif;
+  text-align: center;
+  margin: 40px 0px;
+}
+
+.tournament-wrapper {
+  display: flex;
+  align-items: flex-start;
+
+}
+
+.tournament-left-blank {
+  width: 10%; 
+}
+
+.tournament-details {
+  width: 10%; 
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  margin-left: 10px;
+}
+
+.tournament-details-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.tournament-details-list-element {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.single-elimination-container {
+  border-radius: 8px;
+  border: solid 4px #838486;
+}

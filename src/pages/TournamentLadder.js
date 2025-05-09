@@ -180,17 +180,38 @@ export const exampleLadder = [
   }
 ];
 
+const LightTheme = createTheme({
+  textColor: { main: "#000000", highlighted: "#3F3D56", dark: "#707582" },
+  matchBackground: { wonColor: "#E3F2FD", lostColor: "#FFEBEE" },
+  score: {
+    background: {
+      wonColor: "#BBDEFB",
+      lostColor: "#FFCDD2",
+    },
+    text: { highlightedWonColor: "#1E88E5", highlightedLostColor: "#E53935" },
+  },
+  border: {
+    color: "#BDBDBD",
+    highlightedColor: "rgba(25,118,210,0.4)",
+  },
+  roundHeader: { backgroundColor: "#E0E0E0", fontColor: "#212121" },
+  connectorColor: "#BDBDBD",
+  connectorColorHighlight: "rgba(25,118,210,0.4)",
+  svgBackground: "#FAFAFA",
+});
+
+
 const SingleElimination = () => (
   <SingleEliminationBracket
-  //   theme={GlootTheme}
+    theme={LightTheme}
     matches={exampleLadder}
     matchComponent={Match}
     svgWrapper={({ children, ...props }) => (
       <SVGViewer
-        width={5000}
-        height={2500}
-        background="rgb(11, 13, 19)"
-        SVGBackground="rgb(11, 13, 19)"
+        width={1200}
+        height={1000}
+        background="rgb(255, 255, 255)"
+        SVGBackground="rgb(255, 255, 255)"
         {...props}
       >
         {children}
@@ -205,42 +226,26 @@ const TournamentLadder = ({name, place, date}) => {
   return (
     <>
       <div className="tournament-title">
-        <h1>
-          {name}
-        </h1>
+        <h1>{name}</h1>
       </div>
-      <div class="tournament-left-blank"></div>
-      <SingleElimination />
-      <div class="tournament-details">
-        <ul className="tournament-details-list">
-          <li className="tournament-details-list-element">Miejsce turnieju: <br></br> {place}</li>
-          <li className="tournament-details-list-element">Czas turnieju: <br></br> {date}</li>
-        </ul>
+      <div className="tournament-wrapper">
+        <div className="tournament-left-blank"></div>
+        <div className="single-elimination-container">
+          <SingleElimination />
+        </div>
+        <div className="tournament-details">
+          <ul className="tournament-details-list">
+            <li className="tournament-details-list-element">
+              Miejsce turnieju: {place}
+            </li>
+            <li className="tournament-details-list-element">
+              Czas turnieju: {date}
+            </li>
+          </ul>
+        </div>
       </div>
     </>
     );
 };
-  
-//   const GlootTheme = createTheme({
-//     textColor: { main: "#000000", highlighted: "#F4F2FE", dark: "#707582" },
-//     matchBackground: { wonColor: "#2D2D59", lostColor: "#1B1D2D" },
-//     score: {
-//       background: {
-//         wonColor: `#10131C`,
-//         lostColor: "#10131C"
-//       },
-//       text: { highlightedWonColor: "#7BF59D", highlightedLostColor: "#FB7E94" }
-//     },
-//     border: {
-//       color: "#292B43",
-//       highlightedColor: "RGBA(152,82,242,0.4)"
-//     },
-//     roundHeader: { backgroundColor: "#3B3F73", fontColor: "#F4F2FE" },
-//     connectorColor: "#3B3F73",
-//     connectorColorHighlight: "RGBA(152,82,242,0.4)",
-//     svgBackground: "#0F121C"
-//   });
-  
-
 
 export default TournamentLadder;
