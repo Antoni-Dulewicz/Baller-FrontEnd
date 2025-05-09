@@ -236,10 +236,10 @@ const TournamentLadder = ({name, place, date}) => {
         <div className="tournament-details">
           <ul className="tournament-details-list">
             <li className="tournament-details-list-element">
-              Miejsce turnieju: {place}
+              <h2>Miejsce turnieju:</h2> <p>{place}</p>
             </li>
             <li className="tournament-details-list-element">
-              Czas turnieju: {date}
+              <h2>Czas:</h2> <p>{date}</p>
             </li>
           </ul>
         </div>

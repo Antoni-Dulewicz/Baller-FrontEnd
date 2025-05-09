@@ -68,10 +68,20 @@
 
 .tournament-details-list-element {
   font-size: 16px;
-  margin-bottom: 10px;
+  margin-bottom: 40px;
 }
 
 .single-elimination-container {
   border-radius: 8px;
-  border: solid 4px #838486;
+  border: solid 4px #cacaca;
+  padding: 20px;
+}
+
+.tournament-details-list-element h2 {
+  font-size: large;
+}
+
+.tournament-details-list-element p, h2 {
+  font-family: 'Helvetica', sans-serif;
+  text-align: center;
 }
