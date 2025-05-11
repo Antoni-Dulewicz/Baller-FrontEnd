@@ -4,9 +4,11 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { createEventId } from './event-utils'
+import Header from './Header';
+import { getEvents } from '../services/eventService';
 
-export default function App() {
+export default function Schedule() {
+
   const [weekendsVisible, setWeekendsVisible] = useState(true)
   const [currentEvents, setCurrentEvents] = useState([])
 
@@ -14,28 +16,8 @@ export default function App() {
     setWeekendsVisible(!weekendsVisible)
   }
 
-  function handleDateSelect(selectInfo) {
-    let title = prompt('Please enter a new title for your event')
-    console.log("events: ", selectInfo.view.calendar.getEvents())
-    let calendarApi = selectInfo.view.calendar
-
-    calendarApi.unselect() // clear date selection
-
-    if (title) {
-      calendarApi.addEvent({
-        id: createEventId(),
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay
-      })
-    }
-  }
-
   function handleEventClick(clickInfo) {
-    // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-    //   clickInfo.event.remove()
-    // }
+    
   }
 
   function handleEvents(events) {
@@ -51,67 +33,65 @@ export default function App() {
   
 
   useEffect(() => {
-    const url = 'http://localhost:8080/api/events'
-  
-    fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Fetched data: ", data)
-        
+    const fetchData = async () => {
+      try {
+        const data = await getEvents();    
+        console.log("Fetched data: ", data);
+
         const mappedEvents = data.map((event) => ({
           id: String(event.id),
           title: event.name,
-          start: event.start_date,   
-          end: addOneDay(event.end_date), 
+          start: event.start_date,
+          end: addOneDay(event.end_date),
           allDay: true
-        }))
-        
-        setCurrentEvents(mappedEvents)
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error)
-      })
+        }));
+
+        setCurrentEvents(mappedEvents);
+      } catch (error) {
+        console.error('Błąd przy pobieraniu wydarzeń:', error);
+      }
+    };
+
+    fetchData();  
   }, [])
 
 
   return (
-    <div className='app'>
-      <Sidebar
-        weekendsVisible={weekendsVisible}
-        handleWeekendsToggle={handleWeekendsToggle}
-        currentEvents={currentEvents}
-      />
-      <div className='app-main'>
-        <FullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          headerToolbar={{
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-          }}
-          initialView='dayGridMonth'
-          editable={true}
-          selectable={true}
-          selectMirror={true}
-          dayMaxEvents={true}
-          weekends={weekendsVisible}
-          select={handleDateSelect}
-          events={currentEvents} 
-          eventContent={renderEventContent} // custom render function
-          eventClick={handleEventClick}
-          // eventsSet={handleEvents} // called after events are initialized/added/changed/removed
-          /* you can update a remote database when these fire:
-          eventAdd={function(){}}
-          eventChange={function(){}}
-          eventRemove={function(){}}
-          */
+    <div>
+      <Header title="Harmonogram" />
+      
+      <div className='app'>
+        <Sidebar
+          weekendsVisible={weekendsVisible}
+          handleWeekendsToggle={handleWeekendsToggle}
+          currentEvents={currentEvents}
         />
+        <div className='app-main'>
+          <FullCalendar
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            headerToolbar={{
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            }}
+            initialView='dayGridMonth'
+            editable={true}
+            selectable={true}
+            selectMirror={true}
+            dayMaxEvents={true}
+            weekends={weekendsVisible}
+            // select={handleDateSelect}
+            events={currentEvents} 
+            eventContent={renderEventContent} // custom render function
+            eventClick={handleEventClick}
+            // eventsSet={handleEvents} // called after events are initialized/added/changed/removed
+            /* you can update a remote database when these fire:
+            eventAdd={function(){}}
+            eventChange={function(){}}
+            eventRemove={function(){}}
+            */
+          />
+        </div>
       </div>
     </div>
   )
@@ -128,35 +108,36 @@ function renderEventContent(eventInfo) {
 
 function Sidebar({ weekendsVisible, handleWeekendsToggle, currentEvents }) {
   return (
-    <div className='app-sidebar'>
-      <div className='app-sidebar-section'>
-        <h2>Instructions</h2>
-        <ul>
-          <li>Select dates and you will be prompted to create a new event</li>
-          <li>Drag, drop, and resize events</li>
-          <li>Click an event to delete it</li>
-        </ul>
-      </div>
-      <div className='app-sidebar-section'>
-        <label>
+    <div className="bg-white-800 p-4 rounded-lg w-64">
+      <h2 className="text-xl font-semibold mb-4">Opcje</h2>
+      
+      <div className="mb-6">
+        <label className="flex items-center space-x-2 cursor-pointer">
           <input
-            type='checkbox'
+            type="checkbox"
             checked={weekendsVisible}
             onChange={handleWeekendsToggle}
-          ></input>
-          toggle weekends
+            className="h-4 w-4"
+          />
+          <span>Pokaż weekendy</span>
         </label>
       </div>
-      <div className='app-sidebar-section'>
-        <h2>All Events ({currentEvents.length})</h2>
-        <ul>
-          {currentEvents.map((event) => (
-            <SidebarEvent key={event.id} event={event} />
+      
+      <div>
+        <h3 className="font-medium mb-2 text-lg">Aktualne wydarzenia ({currentEvents.length})</h3>
+        <ul className="space-y-2 max-h-96 overflow-auto">
+          {currentEvents.map(event => (
+            <li key={event.id} className="bg-blue-500 p-2 rounded">
+              <strong>{event.title}</strong>
+              <p className="text-xs opacity-80">
+                {new Date(event.start).toLocaleDateString()}
+              </p>
+            </li>
           ))}
         </ul>
       </div>
     </div>
-  )
+  );
 }
 
 function SidebarEvent({ event }) {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@mui/material';
 import CustomTable from '../components/Table/Table';
+import Header from './Header';
 
 const referees = [
   { id: 1, name: 'Adam Nowak', email: 'adam@example.com' },
@@ -35,9 +36,13 @@ const AcceptReferees = () => {
   }));
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h2>Oczekujący sędziowie</h2>
-      <CustomTable data={tableData} columns={columns} />
+    <div>
+      <Header title="Sedziowie" />
+
+      <div style={{ padding: '2rem' }}>
+        <h2>Oczekujący sędziowie</h2>
+        <CustomTable data={tableData} columns={columns} />
+      </div>
     </div>
   );
 };
