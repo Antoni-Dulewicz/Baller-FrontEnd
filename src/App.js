@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AcceptReferees from './pages/AcceptReferees';
 import AddEventForm from './pages/AddEventForm';
 import Schedule from './pages/Schedule';
+import AdminPage from './pages/AdminPage';
 import CreateTournament from './pages/CreateTournament';
 import TournamentLadder from './pages/TournamentLadder';
 
@@ -14,6 +15,7 @@ function App() {
                 <Route path="/referees" element={<AcceptReferees />} />
                 <Route path="/add-event" element={<AddEventForm />} />
                 <Route path="/schedule" element={<Schedule/>} />
+                <Route path="/admin" element={<AdminPage/>} />
                 <Route path="/create-tournament" element={<CreateTournament/>} />
                 <Route path="/tournament" element={<TournamentLadder
                     name = {"Example Tournament Ladder"}
