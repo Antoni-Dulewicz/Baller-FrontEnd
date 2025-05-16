@@ -1,63 +1,92 @@
-import { User } from 'lucide-react';
+import { User, Menu, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
-const Header = ({title}) => {
+const Header = ({ title }) => {
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleButtonClick = (path) => {
     navigate(path);
+    setIsMenuOpen(false);
   };
 
+  const navItems = [
+    { path: '/admin', label: 'Strona główna' },
+    { path: '/algorithm', label: 'Uruchom scheduling' },
+    { path: '/schedule', label: 'Pokaż Harmonogram', isActive: true },
+    { path: '/add-event', label: 'Zarządzaj wydarzeniami' },
+    { path: '/referees', label: 'Zarządzaj sędziami' },
+    { path: '/venues', label: 'Zarządzaj obiektami' },
+  ];
+
   return (
-    <header className="p-4 bg-white flex justify-between items-center">
-      {/* Tytuł */}
-      <h1 className="text-2xl font-bold pl-8">{title}</h1>
-
-      {/* Nawigacja */}
-      <div className="flex gap-4 items-center">
-        <button
-          onClick={() => handleButtonClick('/admin')}
-          className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded"
-        >
-          Strona główna
-        </button>
-        <button
-          onClick={() => handleButtonClick('/algorithm')}
-          className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded"
-        >
-          Uruchom scheduling
-        </button>
-        {/* font-bold */}
+    <header className="p-4 bg-white shadow-sm">
+      {/* Top bar with title, menu toggle and user icon */}
+      <div className="w-full flex justify-between items-center">
+        <h1 className="text-xl md:text-2xl font-bold">{title}</h1>
         
-        <button 
-          onClick={() => handleButtonClick('/schedule')}
-          className="bg-blue-600 hover:bg-blue-600 px-4 py-2 rounded">
-          Pokaż Harmonogram
-        </button>
-        <button
-          onClick={() => handleButtonClick('/add-event')}
-          className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded"
-        >
-          Zarządzaj wydarzeniami
-        </button>
-        <button
-          onClick={() => handleButtonClick('/referees')}
-          className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded"
-        >
-          Zarządzaj sędziami
-        </button>
-        <button
-          onClick={() => handleButtonClick('/venues')}
-          className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded"
-        >
-          Zarządzaj obiektami
-        </button>
+        <div className="flex items-center gap-2">          
+          {/* Mobile menu toggle */}
+          <button 
+            className="p-2 rounded-full hover:bg-gray-100 lg:hidden" 
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
 
-        {/* Ikona użytkownika */}
-        <button className="p-2 rounded-full hover:bg-blue-600">
-          <User size={24} />
-        </button>
+          {/* User icon - always visible */}
+          <button className="p-2 rounded-full hover:bg-gray-100">
+            <User size={24} />
+          </button>
+        </div>
       </div>
+
+      {/* Navigation - three different layouts based on screen size */}
+      <nav className={`
+        ${isMenuOpen ? 'flex' : 'hidden'} 
+        lg:flex flex-col md:flex-row flex-wrap
+        w-full mt-4 gap-2
+      `}>
+        <div className="w-full lg:hidden grid grid-cols-2 gap-2">
+          {navItems.map((item) => (
+            <button
+              key={item.path}
+              onClick={() => handleButtonClick(item.path)}
+              className={`
+                py-2 px-2 text-sm md:text-base rounded text-center
+                transition-colors duration-200
+                ${item.isActive 
+                  ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                  : 'bg-blue-500 text-white hover:bg-blue-600'
+                }
+              `}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Desktop navigation - horizontal row */}
+        <div className="hidden lg:flex flex-row gap-3 justify-center">
+          {navItems.map((item) => (
+            <button
+              key={item.path}
+              onClick={() => handleButtonClick(item.path)}
+              className={`
+                py-2 px-4 text-base rounded text-center
+                transition-colors duration-200
+                ${item.isActive 
+                  ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                  : 'bg-blue-500 text-white hover:bg-blue-600'
+                }
+              `}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </nav>
     </header>
   );
 };
