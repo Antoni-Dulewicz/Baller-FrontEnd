@@ -45,7 +45,7 @@ const AdminPage = () => {
         </button>
 
         <button 
-          onClick={() => handleButtonClick('/add-event')}
+          onClick={() => handleButtonClick('/events')}
           className="bg-blue-500 hover:bg-blue-600 p-4 rounded w-48 h-24 text-center flex flex-col items-center justify-center"
         >
           <div className="mb-2">

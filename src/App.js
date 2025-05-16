@@ -2,7 +2,7 @@ import './App.css';
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AcceptReferees from './pages/AcceptReferees';
-import AddEventForm from './pages/AddEventForm';
+import EventsPage from './pages/EventsPage';
 import Schedule from './pages/Schedule';
 import AdminPage from './pages/AdminPage';
 import CreateTournament from './pages/CreateTournament';
@@ -14,7 +14,7 @@ function App() {
         <Router>
             <Routes>
                 <Route path="/referees" element={<AcceptReferees />} />
-                <Route path="/add-event" element={<AddEventForm />} />
+                <Route path="/events" element={<EventsPage />} />
                 <Route path="/venues" element={<VenuesPage />} />
                 <Route path="/schedule" element={<Schedule/>} />
                 <Route path="/admin" element={<AdminPage/>} />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@mui/material';
 import CustomTable from '../components/Table/Table';
-import Header from './Header';
+import Header from '../components/Header';
 
 const referees = [
   { id: 1, name: 'Adam Nowak', email: 'adam@example.com' },

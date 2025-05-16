@@ -28,7 +28,9 @@ const CustomTable = ({ data, columns }) => {
             <TableRow key={rowIdx}>
               {columns.map((col, colIdx) => (
                 <TableCell key={colIdx} align={col.align || 'left'}>
-                  {row[col.accessor]}
+                  {col.render
+                    ? col.render(row[col.accessor], row)
+                    : row[col.accessor]}
                 </TableCell>
               ))}
             </TableRow>

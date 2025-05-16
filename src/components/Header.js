@@ -14,8 +14,8 @@ const Header = ({ title }) => {
   const navItems = [
     { path: '/admin', label: 'Strona główna' },
     { path: '/algorithm', label: 'Uruchom scheduling' },
-    { path: '/schedule', label: 'Pokaż Harmonogram', isActive: true },
-    { path: '/add-event', label: 'Zarządzaj wydarzeniami' },
+    { path: '/schedule', label: 'Pokaż Harmonogram'},
+    { path: '/events', label: 'Zarządzaj wydarzeniami' },
     { path: '/referees', label: 'Zarządzaj sędziami' },
     { path: '/venues', label: 'Zarządzaj obiektami' },
   ];
