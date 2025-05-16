@@ -4,7 +4,7 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import Header from './Header';
+import Header from '../components/Header';
 import { getEvents } from '../services/eventService';
 
 export default function Schedule() {

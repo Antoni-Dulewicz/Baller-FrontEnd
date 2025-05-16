@@ -66,6 +66,33 @@ export async function createVenue(formData) {
     });
 
     if (!response.ok) {
-        throw new Error('Failed to create venue');
+      if (response.status === 409) {
+        const message = await response.text();
+        console.error("Błąd konfliktu:", message);
+        throw new Error(message);
+      } else {
+        const message = await response.text();
+        console.error("Inny błąd:", message);
+        throw new Error(message);
+      }
+        
     }
+}
+
+export async function updateEvent() {
+  // const url = 'http://localhost:8080/api/events';
+
+  // const response = await fetch(url, {
+  //   method: "GET",
+  //   headers: {
+  //     "Content-type": "application/json; charset=UTF-8",
+  //     "Accept": "application/json"
+  //   }
+  // });
+
+  // if (!response.ok) {
+  //   throw new Error('Failed to get events');
+  // }
+
+  // return response.json();
 }
