@@ -7,6 +7,7 @@ import Schedule from './pages/Schedule';
 import AdminPage from './pages/AdminPage';
 import CreateTournament from './pages/CreateTournament';
 import TournamentLadder from './pages/TournamentLadder';
+import VenuesPage from './pages/VenuesPage';
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
             <Routes>
                 <Route path="/referees" element={<AcceptReferees />} />
                 <Route path="/add-event" element={<AddEventForm />} />
+                <Route path="/venues" element={<VenuesPage />} />
                 <Route path="/schedule" element={<Schedule/>} />
                 <Route path="/admin" element={<AdminPage/>} />
                 <Route path="/create-tournament" element={<CreateTournament/>} />
