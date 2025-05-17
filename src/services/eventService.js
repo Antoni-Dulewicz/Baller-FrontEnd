@@ -8,7 +8,7 @@ export async function getVenues() {
 }
 
 export async function createEvent(formData) {
-    const url = 'http://localhost:8080/api/events';
+    const url = 'http://localhost:8080/api/event';
 
     const eventData = {
         name: formData.name,
@@ -31,7 +31,7 @@ export async function createEvent(formData) {
 }
 
 export async function getEvents() {
-  const url = 'http://localhost:8080/api/events';
+  const url = 'http://localhost:8080/api/event';
 
   const response = await fetch(url, {
     method: "GET",
@@ -79,20 +79,46 @@ export async function createVenue(formData) {
     }
 }
 
-export async function updateEvent() {
-  // const url = 'http://localhost:8080/api/events';
+export async function updateEvent(editFormData) {
+  const url = `http://localhost:8080/api/event/${editFormData.id}`;
 
-  // const response = await fetch(url, {
-  //   method: "GET",
-  //   headers: {
-  //     "Content-type": "application/json; charset=UTF-8",
-  //     "Accept": "application/json"
-  //   }
-  // });
+  const eventUpdateData = {
+    name: editFormData.name,
+    start_date: editFormData.startDate,
+    end_date: editFormData.endDate,
+    };
 
-  // if (!response.ok) {
-  //   throw new Error('Failed to get events');
-  // }
+  const response = await fetch(url, {
+    method: "PUT",
+    body: JSON.stringify(eventUpdateData),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      "Accept": "application/json"
+    }
+  });
 
-  // return response.json();
+  if (!response.ok) {
+    const message = await response.text();
+    console.error(message);
+    throw new Error(message);
+  }
+}
+
+export async function deleteEvent(eventId) {
+  const url = `http://localhost:8080/api/event/${eventId}`
+
+  const response = await fetch(url,{
+    method: "DELETE",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      "Accept": "application/json"
+    }
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    console.error(message);
+    throw new Error(message);
+  }
+
 }
