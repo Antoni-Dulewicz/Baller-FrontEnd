@@ -1,6 +1,9 @@
 import Header from '../components/Header';
 import React, { useEffect, useState } from 'react';
-import { Box, Button, TextField, Typography, Paper, Select, MenuItem, Grid, Card, CardContent, formError, Alert, Collapse } from '@mui/material';
+import { 
+    Box, Button, TextField, Typography, Paper, Select,
+    MenuItem, Grid, Card, CardContent, formError, Alert, 
+    Collapse } from '@mui/material';
 import { createVenue, getVenues } from '../services/eventService';
 
 const VenuesPage = () => {
@@ -52,6 +55,7 @@ const VenuesPage = () => {
             setFormData(defaultFormData);
             // Refresh venues list after adding a new one
             fetchVenues();
+            setIsFormOpen(false);
         } catch (error) {
             setFormError(error.message);
         }
@@ -60,8 +64,6 @@ const VenuesPage = () => {
     const toggleForm = () => {
         setIsFormOpen(!isFormOpen);
     };
-
-  
 
     return (
         <div>
