@@ -1,19 +1,43 @@
-import React from 'react';
-import { Button } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Button, Box, Collapse } from '@mui/material';
 import CustomTable from '../components/Table/Table';
 import Header from '../components/Header';
-
-const referees = [
-  { id: 1, name: 'Adam Nowak', email: 'adam@example.com' },
-  { id: 2, name: 'Ewa Wiśniewska', email: 'ewa@example.com' },
-];
+import { getReferees, acceptReferee } from '../services/eventService';
 
 const AcceptReferees = () => {
-  const handleAccept = (refereeId) => {
-    console.log(`Zaakceptowano sędziego o ID: ${refereeId}`);
+
+  const [referees, setReferees] = useState([]);
+  const [approvedReferees, setApprovedReferees] = useState([]);
+  const [notApprovedReferees, setNotApprovedReferees] = useState([]);
+  const [isTableOpen, setIsTableOpen] = useState(false);
+
+  const fetchReferees = async () => {
+    try{
+      const data = await getReferees();
+      setReferees(data);
+      setApprovedReferees(data.filter(ref => ref.approved));
+      setNotApprovedReferees(data.filter(ref => !ref.approved));
+      console.log('Fetched referees:', data);
+    } catch (error){
+      console.error('Error fetching referees:', error);
+    }
+  }
+
+  useEffect(() => {
+    fetchReferees();
+  },[])
+
+  const handleAccept = async (refereeId) => {
+    try {
+      await acceptReferee(refereeId);
+      fetchReferees()
+
+    } catch (error) {
+        console.log(error);
+    }
   };
 
-  const columns = [
+  const columnsNotAccepted = [
     { header: 'Imię i nazwisko', accessor: 'name' },
     { header: 'Email', accessor: 'email' },
     {
@@ -28,12 +52,14 @@ const AcceptReferees = () => {
     },
   ];
 
-  const tableData = referees.map((ref) => ({
-    ...ref,
-    id: columns.find((c) => c.accessor === 'id' && c.render)
-      ? columns.find((c) => c.accessor === 'id').render(ref.id)
-      : ref.id,
-  }));
+  const columnsAccepted = [
+    { header: 'Imię i nazwisko', accessor: 'name' },
+    { header: 'Email', accessor: 'email' },
+  ];
+
+  const toggleForm = () => {
+    setIsTableOpen(!isTableOpen)
+  }
 
   return (
     <div>
@@ -41,7 +67,20 @@ const AcceptReferees = () => {
 
       <div style={{ padding: '2rem' }}>
         <h2>Oczekujący sędziowie</h2>
-        <CustomTable data={tableData} columns={columns} />
+        <CustomTable data={notApprovedReferees} columns={columnsNotAccepted} />
+        <h2>Zakceptowani sędziowie</h2>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem' }}>
+            <Button 
+                variant="contained" 
+                color="primary" 
+                onClick={toggleForm}
+            >
+                {isTableOpen ? 'Zwiń' : 'Rozwiń'}
+            </Button>
+        </Box>
+        <Collapse in={isTableOpen}>
+          <CustomTable data={approvedReferees} columns={columnsAccepted} />
+        </Collapse>
       </div>
     </div>
   );
