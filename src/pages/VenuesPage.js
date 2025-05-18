@@ -94,8 +94,8 @@ const VenuesPage = () => {
                     <Box component="form" onSubmit={handleSubmit} display="flex" flexDirection="column" gap={2}>
                         <TextField label="Nazwa obiektu" name="name" value={formData.name} onChange={handleChange} required />
                         <Select label="Lokalizacja" name="location" value={formData.location} onChange={handleChange} required>
-                            <MenuItem key="krakow" value="Kraków">
-                                Kraków
+                            <MenuItem key="krakow" value="Krakow">
+                                Krakow
                             </MenuItem>
                         </Select>
                         <TextField label="Opis" name="description" value={formData.description} onChange={handleChange} multiline rows={4} />

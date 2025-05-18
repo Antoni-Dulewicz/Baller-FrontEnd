@@ -14,7 +14,7 @@ export async function createEvent(formData) {
         name: formData.name,
         start_date: formData.startDate,
         end_date: formData.endDate,
-        venues: [formData.location.id]
+        venues: formData.venues.map(venue => venue.id)
     };
 
     const response = await fetch(url, {
@@ -26,7 +26,9 @@ export async function createEvent(formData) {
     });
 
     if (!response.ok) {
-        throw new Error('Failed to create event');
+      const message = await response.text();
+      console.error(message);
+      throw new Error(message);
     }
 }
 
@@ -86,6 +88,7 @@ export async function updateEvent(editFormData) {
     name: editFormData.name,
     start_date: editFormData.startDate,
     end_date: editFormData.endDate,
+    venues: editFormData.venues.map(venue => venue.id)
     };
 
   const response = await fetch(url, {
@@ -119,6 +122,41 @@ export async function deleteEvent(eventId) {
     const message = await response.text();
     console.error(message);
     throw new Error(message);
+  }
+
+}
+
+export async function getReferees() {
+  const url = 'http://localhost:8080/api/referee';
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      "Accept": "application/json"
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to get referees');
+  }
+
+  return response.json();
+}
+
+export async function acceptReferee(refereeId) {
+  const url = `http://localhost:8080/api/referee/${refereeId}/approve`;
+
+  const response = await fetch(url, {
+    method: "PATCH",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      "Accept": "application/json"
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to accept referee: ${refereeId}`);
   }
 
 }
