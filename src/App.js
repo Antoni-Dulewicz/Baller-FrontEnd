@@ -8,6 +8,9 @@ import AdminPage from './pages/AdminPage';
 import CreateTournament from './pages/CreateTournament';
 import TournamentLadder from './pages/TournamentLadder';
 import VenuesPage from './pages/VenuesPage';
+import MatchList from './pages/MatchList';
+import UserPage from './pages/UserPage';
+import EventRegistration from './pages/EventRegistration.js';
 
 function App() {
     return (
@@ -25,6 +28,9 @@ function App() {
                     date = {"09.05.2025"}
                 />} 
                 />
+                <Route path="/matches" element={<MatchList/>} />
+                <Route path="/user" element={<UserPage/>} />
+                <Route path="/event-registration" element={<EventRegistration/>} />
             </Routes>
         </Router>
     );
