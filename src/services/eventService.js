@@ -100,12 +100,50 @@ export async function updateEvent(editFormData) {
     }
   });
 
+  
   if (!response.ok) {
     const message = await response.text();
     console.error(message);
     throw new Error(message);
   }
 }
+
+export async function getPlayerMatches(playerId) {
+  const url = `http://localhost:8080/api/player/${playerId}/matches`;
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Accept: 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to get player matches');
+  }
+
+  return response.json();
+}
+
+export async function getVenue(venueId) {
+  const url = `http://localhost:8080/api/venues/${venueId}`;
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Accept: 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to get player matches');
+  }
+
+  return response.json();
+}
+
 
 export async function deleteEvent(eventId) {
   const url = `http://localhost:8080/api/event/${eventId}`
@@ -158,5 +196,43 @@ export async function acceptReferee(refereeId) {
   if (!response.ok) {
     throw new Error(`Failed to accept referee: ${refereeId}`);
   }
+}
 
+export async function registerToEvent(eventId, userId) {
+  const url = `http://localhost:8080/api/event/${eventId}/register/${userId}`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      "Accept": "application/json"
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to register user ${userId} to event ${eventId}`);
+  }
+}
+
+export async function getUpcomingEvents() {
+  
+  
+  const url = `http://localhost:8080/api/event`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Accept": "application/json"
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Nie udało się pobrać listy turniejów");
+  }
+  
+  const events = await response.json();
+  console.log("DANE Z BACKENDU:", events);
+  const today = new Date().toISOString().split('T')[0];
+
+  return events.filter(event => event.start_date > today);
 }
