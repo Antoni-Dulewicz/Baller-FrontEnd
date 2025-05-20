@@ -28,7 +28,7 @@ const EventRegistration = () => {
     try {
       setError(null);
       await registerToEvent(eventId, userId);
-      setSuccess(`Zapisano do wydarzenia #${eventId}`);
+      setSuccess(`Zapisano do wydarzenia`);
     } catch (err) {
       setError(`Nie udało się zapisać: ${err.message}`);
     }
@@ -65,7 +65,6 @@ const EventRegistration = () => {
                     <div>
                     <h2 className="text-xl font-semibold mb-2">{event.name}</h2>
                     <p className="text-sm text-gray-600">Od: {event.start_date} &nbsp; | &nbsp;Do: {event.end_date}</p>
-                    <p className="text-sm mt-1 text-gray-500">ID wydarzenia: {event.id}</p>
                     </div>
                     <button
                     onClick={() => handleRegister(event.id)}
