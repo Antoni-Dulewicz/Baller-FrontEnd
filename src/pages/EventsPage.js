@@ -12,7 +12,7 @@ const AddEventForm = () => {
         name: '',
         startDate: new Date().toISOString().slice(0, 10),
         endDate: new Date().toISOString().slice(0, 10),
-        location: '',
+        venues: [],
         description: '',
     };
 
@@ -20,6 +20,7 @@ const AddEventForm = () => {
         name: '',
         startDate: new Date().toISOString().slice(0, 10),
         endDate: new Date().toISOString().slice(0, 10),
+        venues: []
     };
 
     const [formData, setFormData] = useState(defaultFormData);
@@ -29,6 +30,7 @@ const AddEventForm = () => {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [editorOpen, setEditorOpen] = useState(false);
     const [formError, setFormError] = useState(null);
+    const [editFormError, setEditFormError] = useState(null);
 
     useEffect(() => {
         const fetchVenues = async () => {
@@ -69,12 +71,15 @@ const AddEventForm = () => {
             ...prev,
             [e.target.name]: e.target.value,
         }));
+
+        if (editFormError) setEditFormError(null);
     };
 
     const handleSubmit = async e => {
         e.preventDefault();
 
         console.log('Dodano wydarzenie:', formData);
+        setFormError(null);
 
         try {
             await createEvent(formData);
@@ -87,7 +92,7 @@ const AddEventForm = () => {
             // Zamknij formularz po dodaniu wydarzenia
             setIsFormOpen(false);
         } catch (error) {
-            console.error('Błąd przy dodawaniu wydarzenia:', error);
+            setFormError(error.message);
         }
     };
 
@@ -101,6 +106,7 @@ const AddEventForm = () => {
                 name: eventToEdit.name,
                 startDate: new Date(eventToEdit.start_date).toISOString().slice(0, 10),
                 endDate: new Date(eventToEdit.end_date).toISOString().slice(0, 10),
+                venues: venues.filter(venue => eventToEdit.venues.includes(venue.id))
             };
             setEditFormData(formattedEvent);
             setEditorOpen(true);
@@ -108,6 +114,7 @@ const AddEventForm = () => {
     };
 
     const handleClose = (id) => {
+        setEditFormError(null);
         setEditorOpen(false);
     };
 
@@ -126,7 +133,7 @@ const AddEventForm = () => {
     const handleEdit = async e => {
         e.preventDefault();
         console.log('Edytowano wydarzenie:', editFormData);
-        setFormError(null);
+        setEditFormError(null);
 
         try {
             await updateEvent(editFormData);
@@ -137,7 +144,7 @@ const AddEventForm = () => {
             
             setEditorOpen(false);
         } catch (error) {
-            setFormError(error.message);
+            setEditFormError(error.message);
         }
 
     }
@@ -176,9 +183,9 @@ const AddEventForm = () => {
 
             <Dialog open={editorOpen} onClose={handleClose}>
                 <DialogTitle>Dane</DialogTitle>
-                {formError && (
+                {editFormError && (
                     <Alert severity="error" sx={{ mb: 2 }}>
-                        {formError}
+                        {editFormError}
                     </Alert>
                 )}
                 <Box component="form" onSubmit={handleEdit}>
@@ -206,6 +213,21 @@ const AddEventForm = () => {
                         onChange={handleEditChange}
                         required
                         />
+                        <Select
+                            label="Lokalizacja"
+                            name="venues"
+                            value={editFormData.venues} 
+                            onChange={handleEditChange}
+                            required
+                            multiple 
+                            renderValue={(selected) => selected.map(loc => loc.name).join(', ')}
+                            >
+                            {venues.map(venue => (
+                                <MenuItem key={venue.id} value={venue}>
+                                {venue.name} - {venue.location}
+                                </MenuItem>
+                            ))}
+                        </Select>
                         <TextField
                         label="Opis"
                         name="description"
@@ -237,6 +259,11 @@ const AddEventForm = () => {
                     <Typography variant="h5" gutterBottom>
                         Dodaj nowe wydarzenie
                     </Typography>
+                    {formError && (
+                        <Alert severity="error" sx={{ mb: 2 }}>
+                            {formError}
+                        </Alert>
+                    )}
                     <Box component="form" onSubmit={handleSubmit} display="flex" flexDirection="column" gap={2}>
                         <TextField label="Nazwa wydarzenia" name="name" value={formData.name} onChange={handleChange} required />
                         <TextField
@@ -248,10 +275,18 @@ const AddEventForm = () => {
                             required
                         />
                         <TextField label="Koniec wydarzenia" name="endDate" type="date" value={formData.endDate} onChange={handleChange} required />
-                        <Select label="Lokalizacja" name="location" value={formData.location} onChange={handleChange} required>
+                        <Select
+                            label="Lokalizacja"
+                            name="venues"
+                            value={formData.venues} 
+                            onChange={handleChange}
+                            required
+                            multiple 
+                            renderValue={(selected) => selected.map(loc => loc.name).join(', ')}
+                            >
                             {venues.map(venue => (
                                 <MenuItem key={venue.id} value={venue}>
-                                    {venue.name} - {venue.location}
+                                {venue.name} - {venue.location}
                                 </MenuItem>
                             ))}
                         </Select>

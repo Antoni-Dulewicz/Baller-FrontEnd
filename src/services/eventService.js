@@ -196,7 +196,6 @@ export async function acceptReferee(refereeId) {
   if (!response.ok) {
     throw new Error(`Failed to accept referee: ${refereeId}`);
   }
-
 }
 
 export async function registerToEvent(eventId, userId) {
@@ -237,5 +236,3 @@ export async function getUpcomingEvents() {
 
   return events.filter(event => event.start_date > today);
 }
-
-
