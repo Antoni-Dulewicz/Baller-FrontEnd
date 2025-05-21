@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { getPlayerMatches, getVenue } from '../services/eventService';
+import { useLocation } from 'react-router-dom';
+import { getPlayerMatches, getRefereeMatches, getVenue } from '../services/eventService';
 import UserHeader from '../components/UserHeader';
+import RefereeHeader from '../components/RefereeHeader';
 
 const playerId = 4;
+const refereeId = 7;
 
-const timeSlotToHours = {
+const timeSlotToHours = {   
   First: "8:00 - 8:45",
   Second: "9:00 - 9:45",
   Third: "10:00 - 10:45",
@@ -26,10 +29,14 @@ function isFutureDate(dateStr) {
 }
 
 const MatchList = () => {
+  const location = useLocation();
   const [matches, setMatches] = useState([]);
   const [error, setError] = useState(null);
   const [venueMap, setVenueMap] = useState({});
   const [view, setView] = useState('upcoming');
+
+  const isReferee = location.pathname.includes('/matches/referee');
+  const userId = isReferee ? refereeId : playerId;
 
   useEffect(() => {
     fetchMatches();
@@ -38,7 +45,9 @@ const MatchList = () => {
   const fetchMatches = async () => {
     try {
       setError(null);
-      const data = await getPlayerMatches(playerId);
+      const data = isReferee
+        ? await getRefereeMatches(userId)
+        : await getPlayerMatches(userId);
       const uniqueVenueIds = [...new Set(data.map(m => m.venue_id))];
 
       const venueEntries = await Promise.all(uniqueVenueIds.map(async (id) => {
@@ -65,10 +74,12 @@ const MatchList = () => {
 
   return (
     <div>
-      <UserHeader title = "Lista meczy" />
-      <div className="min-h-screen bg-gray-100 text-gray-900">
-
-        {/* Content */}
+        {isReferee ? (
+          <RefereeHeader title="Lista meczy" />
+        ) : (
+          <UserHeader title="Lista meczy" />
+        )}
+        <div className="min-h-screen bg-white text-gray-900">
         <main className="max-w-5xl mx-auto px-4 py-8">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-semibold">
@@ -100,7 +111,10 @@ const MatchList = () => {
           <div className="grid gap-4">
             {filteredMatches.map((match) => {
               const venue = venueMap[match.venue_id] || { name: `Obiekt ${match.venue_id}`, location: '' };
-              const playerName = (id) => (id === playerId ? 'Ty' : `Gracz ${id}`);
+              const playerName = (id) => {
+                if (isReferee) return `Gracz ${id}`;
+                return id === playerId ? 'Ty' : `Gracz ${id}`;
+              };
 
               return (
                 <div key={match.id} className="bg-white rounded shadow border border-gray-200">

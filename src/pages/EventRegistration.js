@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { getUpcomingEvents, registerToEvent } from '../services/eventService';
+import { useLocation } from 'react-router-dom';
+import { getUpcomingEvents, registerToEvent, registerRefereeToEvent } from '../services/eventService';
 import { AlertCircle, CalendarCheck } from 'lucide-react';
 import UserHeader from '../components/UserHeader';
+import RefereeHeader from '../components/RefereeHeader';
 
 const userId = 4;
+const refereeId = 7;
 
 const EventRegistration = () => {
+  const location = useLocation();
   const [events, setEvents] = useState([]);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+
+  const isReferee = location.pathname.includes('/event-registration/referee');
+
 
   useEffect(() => {
     loadEvents();
@@ -27,8 +34,14 @@ const EventRegistration = () => {
   const handleRegister = async (eventId) => {
     try {
       setError(null);
-      await registerToEvent(eventId, userId);
-      setSuccess(`Zapisano do wydarzenia`);
+      setSuccess(null);
+      if (isReferee) {
+        await registerRefereeToEvent(eventId, refereeId);
+        setSuccess(`Zarejestrowano sędziego do wydarzenia`);
+      } else {
+        await registerToEvent(eventId, userId);
+        setSuccess(`Zarejestrowano zawodnika do wydarzenia`);
+      }
     } catch (err) {
       setError(`Nie udało się zapisać: ${err.message}`);
     }
@@ -36,7 +49,11 @@ const EventRegistration = () => {
 
   return (
     <div>
-        <UserHeader title = "Rejestracja do turniejów" />
+        {isReferee ? (
+          <RefereeHeader title="Rejestracja do turniejów" />
+        ) : (
+          <UserHeader title="Rejestracja do turniejów" />
+        )}
         <div className="flex flex-col min-h-screen bg-white text-black">
         <main className="flex flex-col gap-6 px-8 py-12">
             {error && (
