@@ -126,6 +126,24 @@ export async function getPlayerMatches(playerId) {
   return response.json();
 }
 
+export async function getRefereeMatches(refereeId) {
+  const url = `http://localhost:8080/api/referee/${refereeId}/matches`;
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Accept: 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to get player matches');
+  }
+
+  return response.json();
+}
+
 export async function getVenue(venueId) {
   const url = `http://localhost:8080/api/venues/${venueId}`;
 
@@ -199,7 +217,7 @@ export async function acceptReferee(refereeId) {
 }
 
 export async function registerToEvent(eventId, userId) {
-  const url = `http://localhost:8080/api/event/${eventId}/register/${userId}`;
+  const url = `http://localhost:8080/api/event/${eventId}/register/player/${userId}`;
 
   const response = await fetch(url, {
     method: "POST",
@@ -211,6 +229,22 @@ export async function registerToEvent(eventId, userId) {
 
   if (!response.ok) {
     throw new Error(`Failed to register user ${userId} to event ${eventId}`);
+  }
+}
+
+export async function registerRefereeToEvent(eventId, refereeId) {
+  const url = `http://localhost:8080/api/event/${eventId}/register/referee/${refereeId}`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      "Accept": "application/json"
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to register referee ${refereeId} to event ${eventId}`);
   }
 }
 
@@ -231,7 +265,6 @@ export async function getUpcomingEvents() {
   }
   
   const events = await response.json();
-  console.log("DANE Z BACKENDU:", events);
   const today = new Date().toISOString().split('T')[0];
 
   return events.filter(event => event.start_date > today);

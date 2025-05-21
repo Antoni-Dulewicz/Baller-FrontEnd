@@ -2,7 +2,7 @@ import { User, Menu, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-const UserHeader = ({ title }) => {
+const RefereeHeader = ({ title }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -13,8 +13,8 @@ const UserHeader = ({ title }) => {
 
   const navItems = [
     { path: '/user', label: 'Strona główna' },
-    { path: '/matches/player', label: 'Lista Meczy' },
-    { path: '/event-registration/player', label: 'Rejestracja'}
+    { path: '/matches/referee', label: 'Lista Meczy' },
+    { path: '/event-registration/referee', label: 'Rejestracja'}
   ];
 
   return (
@@ -88,4 +88,4 @@ const UserHeader = ({ title }) => {
   );
 };
 
-export default UserHeader;
+export default RefereeHeader;

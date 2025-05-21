@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User } from 'lucide-react';
 
-const UserPage = () => {
+const RefereePage = () => {
     const navigate = useNavigate();
 
     const handleButtonClick = (path) => {
@@ -13,7 +13,7 @@ const UserPage = () => {
     <div className="flex flex-col min-h-screen bg-white-900 text-white">
     {/* Header with user icon */}
     <header className="bg-blue-900 p-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold pl-8">Tryb użytkownika</h1>
+        <h1 className="text-2xl font-bold pl-8">Tryb sędziego</h1>
         <button className="p-2 rounded-full hover:bg-blue-800">
         <User size={24} />
         </button>
@@ -21,7 +21,7 @@ const UserPage = () => {
 
     <div className="flex flex-wrap justify-center gap-4 px-8 pt-16">
         <button 
-        onClick={() => handleButtonClick('/matches/player')}
+        onClick={() => handleButtonClick('/matches/referee')}
         className="bg-blue-500 hover:bg-blue-600 p-4 rounded w-48 h-24 text-center flex flex-col items-center justify-center"
         >
         <div className="mb-2">
@@ -33,7 +33,7 @@ const UserPage = () => {
         </button>
     
         <button 
-        onClick={() => handleButtonClick('/event-registration/player')}
+        onClick={() => handleButtonClick('/event-registration/referee')}
         className="bg-blue-500 hover:bg-blue-600 p-4 rounded w-48 h-24 text-center flex flex-col items-center justify-center"
         >
         <div className="mb-2">
@@ -50,4 +50,4 @@ const UserPage = () => {
         
 }
 
-export default UserPage;
+export default RefereePage;
