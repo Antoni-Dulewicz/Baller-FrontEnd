@@ -31,12 +31,39 @@ const LoginPage = () => {
         }))
     }
 
-    const handleSubmit = () => {
+    const [formErrors, setFormErrors] = useState({})
 
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        const errors = {};
+
+        if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) {
+            errors.email = 'Wprowadź poprawny adres email';
+        }
+
+        if (!formData.password || formData.password.length < 6) {
+            errors.password = 'Hasło musi mieć co najmniej 6 znaków';
+        }
+
+        if (formData.password !== formData.repeatPassword) {
+            errors.repeatPassword = 'Hasła muszą być identyczne';
+        }
+
+        if (!userType) {
+            errors.userType = 'Wybierz typ użytkownika';
+        }
+
+        if (Object.keys(errors).length > 0) {
+            setFormErrors(errors);
+            return;
+        }
+
+        console.log('Dane poprawne:', { ...formData, userType });
+        setFormErrors({});
     }
     
     return (
-        <Paper sx={{ maxWidth: 400, margin: '2rem auto', padding: 3 }}>
+        <Paper sx={{ maxWidth: 600, margin: '2rem auto', padding: 3 }}>
             
             <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 900 }}>
                 Rejestracja
@@ -49,10 +76,11 @@ const LoginPage = () => {
                     type="email"
                     value={formData.email}
                     onChange={handleFormChange}
-                    required
+                    error={!!formErrors.email}
+                    helperText={formErrors.email}
                 />
 
-                <FormControl variant="outlined">
+                <FormControl variant="outlined" error={!!formErrors.password}>
                     <InputLabel htmlFor="outlined-adornment-password">Hasło</InputLabel>
                     <OutlinedInput
                         name="password"
@@ -77,16 +105,21 @@ const LoginPage = () => {
                         }
                         label="Password"
                         required
-                />
+                    />
+                    {formErrors.password && (
+                        <Typography variant="caption" color="error">
+                        {formErrors.password}
+                        </Typography>
+                    )}
                 </FormControl>
                 
-                <FormControl variant="outlined">
-                    <InputLabel htmlFor="outlined-adornment-password">Powtórz hasło</InputLabel>
+                <FormControl variant="outlined" error={!!formErrors.confirmPassword}>
+                    <InputLabel htmlFor="outlined-adornment-confirm-password">Powtórz hasło</InputLabel>
                     <OutlinedInput
                         name="repeatPassword"
-                        value={formData.repeatedPassword}
+                        value={formData.repeatPassword}
                         onChange={handleFormChange}
-                        id="outlined-adornment-password"
+                        id="outlined-adornment-confirm-password"
                         type={showPassword ? 'text' : 'password'}
                         endAdornment={
                         <InputAdornment position="end">
@@ -105,8 +138,14 @@ const LoginPage = () => {
                         }
                         label="Password"
                         required
-                />
+                    />
+                    {formErrors.repeatPassword && (
+                        <Typography variant="caption" color="error">
+                        {formErrors.repeatPassword}
+                        </Typography>
+                    )}
                 </FormControl>
+
                 <ChooseUserType
                     types={types}
                     setUserType={setUserType}
