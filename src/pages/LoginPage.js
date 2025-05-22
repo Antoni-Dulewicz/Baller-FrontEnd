@@ -1,18 +1,40 @@
 import ChooseUserType from '../components/ChooseUserType';
 import { 
-    Box, Button, TextField, Typography, Paper, Select,
-    MenuItem, Grid, Card, CardContent, formError, Alert, 
-    Collapse } from '@mui/material';
+    Box, Button, TextField, Typography, Paper, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton } from '@mui/material';
 import { useState } from 'react';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const LoginPage = () => {
 
-    const handleSubmit = () => {}
-    const [formData, setFormData] = useState();
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
+
+    const handleMouseUpPassword = (event) => {
+        event.preventDefault();
+    };
+
     const types = ["Gracz", "Sędzia", "Administrator"]
+    const [userType, setUserType] = useState("Player"); 
 
+    const [formData, setFormData] = useState({email: "", password: "", repeatPassword: ""})
+    const handleFormChange = (event) => {
+        const {name, value} = event.target
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value
+        }))
+    }
 
-    console.log("BGFD")
+    const handleSubmit = () => {
+
+    }
+    
     return (
         <Paper sx={{ maxWidth: 400, margin: '2rem auto', padding: 3 }}>
             
@@ -25,30 +47,71 @@ const LoginPage = () => {
                     label="Email"
                     name="email"
                     type="email"
-                    value={formData}
-                    onChange={handleSubmit}
+                    value={formData.email}
+                    onChange={handleFormChange}
                     required
                 />
-                <TextField
-                    label="Hasło"
-                    name="password"
-                    type="password"
-                    value={formData}
-                    onChange={handleSubmit}
-                    required
+
+                <FormControl variant="outlined">
+                    <InputLabel htmlFor="outlined-adornment-password">Hasło</InputLabel>
+                    <OutlinedInput
+                        name="password"
+                        value={formData.password}
+                        onChange={handleFormChange}
+                        id="outlined-adornment-password"
+                        type={showPassword ? 'text' : 'password'}
+                        endAdornment={
+                        <InputAdornment position="end">
+                            <IconButton
+                            aria-label={
+                                showPassword ? 'hide the password' : 'display the password'
+                            }
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            onMouseUp={handleMouseUpPassword}
+                            edge="end"
+                            >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                        </InputAdornment>
+                        }
+                        label="Password"
+                        required
                 />
-                <TextField 
-                    label="Powtórz hasło"
-                    name="reply-password"
-                    type="password"
-                    value={formData}
-                    onChange={() => {}}
-                    required
+                </FormControl>
+                
+                <FormControl variant="outlined">
+                    <InputLabel htmlFor="outlined-adornment-password">Powtórz hasło</InputLabel>
+                    <OutlinedInput
+                        name="repeatPassword"
+                        value={formData.repeatedPassword}
+                        onChange={handleFormChange}
+                        id="outlined-adornment-password"
+                        type={showPassword ? 'text' : 'password'}
+                        endAdornment={
+                        <InputAdornment position="end">
+                            <IconButton
+                            aria-label={
+                                showPassword ? 'hide the password' : 'display the password'
+                            }
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            onMouseUp={handleMouseUpPassword}
+                            edge="end"
+                            >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                        </InputAdornment>
+                        }
+                        label="Password"
+                        required
                 />
+                </FormControl>
                 <ChooseUserType
                     types={types}
+                    setUserType={setUserType}
                 />
-                <Button type="submit" variant="contained" color="primary">
+                <Button type="submit" variant="contained" color="primary" onClick={handleSubmit}>
                     Zaloguj
                 </Button>
             </Box>
