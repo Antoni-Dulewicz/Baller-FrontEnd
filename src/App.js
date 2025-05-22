@@ -12,6 +12,7 @@ import MatchList from './pages/MatchList';
 import UserPage from './pages/UserPage';
 import EventRegistration from './pages/EventRegistration.js';
 import RefereePage from './pages/RefereePage.js';
+import LoginPage from './pages/LoginPage.js';
 
 function App() {
     return (
@@ -35,6 +36,7 @@ function App() {
                 <Route path="/user" element={<UserPage/>} />
                 <Route path="/event-registration/player" element={<EventRegistration />} />
                 <Route path="/event-registration/referee" element={<EventRegistration />} />
+                <Route path="/" element={<LoginPage />} />
             </Routes>
         </Router>
     );
