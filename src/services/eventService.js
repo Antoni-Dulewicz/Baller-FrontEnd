@@ -1,5 +1,8 @@
+const isDocker = window.location.hostname === 'frontend';
+const API_URL = isDocker ? 'http://backend:8080' : 'http://localhost:8080';
+
 export async function getVenues() {
-    return fetch('http://localhost:8080/api/venue').then(response => {
+    return fetch(`${API_URL}/api/venue`).then(response => {
         if (!response.ok) {
             throw new Error('Response not ok');
         }
@@ -8,7 +11,7 @@ export async function getVenues() {
 }
 
 export async function createEvent(formData) {
-    const url = 'http://localhost:8080/api/event';
+    const url = `${API_URL}/api/event`;
 
     const eventData = {
         name: formData.name,
@@ -33,7 +36,7 @@ export async function createEvent(formData) {
 }
 
 export async function getEvents() {
-  const url = 'http://localhost:8080/api/event';
+  const url = `${API_URL}/api/event`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -51,7 +54,7 @@ export async function getEvents() {
 }
 
 export async function createVenue(formData) {
-    const url = 'http://localhost:8080/api/venue';
+    const url = `${API_URL}/api/venue`;
 
     const venueData = {
         name: formData.name,
@@ -82,7 +85,7 @@ export async function createVenue(formData) {
 }
 
 export async function updateEvent(editFormData) {
-  const url = `http://localhost:8080/api/event/${editFormData.id}`;
+  const url = `${API_URL}/api/event/${editFormData.id}`;
 
   const eventUpdateData = {
     name: editFormData.name,
@@ -109,7 +112,7 @@ export async function updateEvent(editFormData) {
 }
 
 export async function getPlayerMatches(playerId) {
-  const url = `http://localhost:8080/api/player/${playerId}/matches`;
+  const url = `${API_URL}/api/player/${playerId}/matches`;
 
   const response = await fetch(url, {
     method: 'GET',
@@ -127,7 +130,7 @@ export async function getPlayerMatches(playerId) {
 }
 
 export async function getRefereeMatches(refereeId) {
-  const url = `http://localhost:8080/api/referee/${refereeId}/matches`;
+  const url = `${API_URL}/api/referee/${refereeId}/matches`;
 
   const response = await fetch(url, {
     method: 'GET',
@@ -144,8 +147,27 @@ export async function getRefereeMatches(refereeId) {
   return response.json();
 }
 
+export async function getEvent(eventId) {
+  const url = `${API_URL}/api/event/${eventId}`;
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Accept: 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to get event');
+  }
+
+  return response.json();
+
+}
+
 export async function getVenue(venueId) {
-  const url = `http://localhost:8080/api/venues/${venueId}`;
+  const url = `${API_URL}/api/venue/${venueId}`;
 
   const response = await fetch(url, {
     method: 'GET',
@@ -164,7 +186,7 @@ export async function getVenue(venueId) {
 
 
 export async function deleteEvent(eventId) {
-  const url = `http://localhost:8080/api/event/${eventId}`
+  const url = `${API_URL}/api/event/${eventId}`
 
   const response = await fetch(url,{
     method: "DELETE",
@@ -182,8 +204,33 @@ export async function deleteEvent(eventId) {
 
 }
 
+export async function getParticipants(player_ids) {
+  const url = `${API_URL}/api/player/batch`
+
+  const body = {
+    ids: player_ids,
+  };
+
+
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(body),
+    headers: {
+        "Content-type": "application/json; charset=UTF-8"
+    }, 
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    console.error(message);
+    throw new Error(message);
+  }
+
+  return response.json();
+}
+
 export async function getReferees() {
-  const url = 'http://localhost:8080/api/referee';
+  const url = `${API_URL}/api/referee`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -201,7 +248,7 @@ export async function getReferees() {
 }
 
 export async function acceptReferee(refereeId) {
-  const url = `http://localhost:8080/api/referee/${refereeId}/approve`;
+  const url = `${API_URL}/api/referee/${refereeId}/approve`;
 
   const response = await fetch(url, {
     method: "PATCH",
@@ -217,7 +264,7 @@ export async function acceptReferee(refereeId) {
 }
 
 export async function registerToEvent(eventId, userId) {
-  const url = `http://localhost:8080/api/event/${eventId}/register/player/${userId}`;
+  const url = `${API_URL}/api/event/${eventId}/register/player/${userId}`;
 
   const response = await fetch(url, {
     method: "POST",
@@ -233,7 +280,7 @@ export async function registerToEvent(eventId, userId) {
 }
 
 export async function registerRefereeToEvent(eventId, refereeId) {
-  const url = `http://localhost:8080/api/event/${eventId}/register/referee/${refereeId}`;
+  const url = `${API_URL}/api/event/${eventId}/register/referee/${refereeId}`;
 
   const response = await fetch(url, {
     method: "POST",
@@ -249,9 +296,7 @@ export async function registerRefereeToEvent(eventId, refereeId) {
 }
 
 export async function getUpcomingEvents() {
-  
-  
-  const url = `http://localhost:8080/api/event`;
+  const url = `${API_URL}/api/event`;
 
   const response = await fetch(url, {
     method: "GET",
