@@ -20,9 +20,9 @@ const LoginPage = () => {
     };
 
     const types = ["Gracz", "Sędzia", "Administrator"]
-    const [userType, setUserType] = useState("Player"); 
+    const [selectedType, setSelectedType] = useState("Gracz"); 
 
-    const [formData, setFormData] = useState({email: "", password: "", repeatPassword: ""})
+    const [formData, setFormData] = useState({username: "", email: "", password: "", repeatPassword: ""})
     const handleFormChange = (event) => {
         const {name, value} = event.target
         setFormData((prevData) => ({
@@ -37,20 +37,20 @@ const LoginPage = () => {
         event.preventDefault()
         const errors = {};
 
-        if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) {
-            errors.email = 'Wprowadź poprawny adres email';
+        if (!formData.username) {
+            errors.username = 'Wpisz nazwę użytkownika';
         }
 
-        if (!formData.password || formData.password.length < 6) {
-            errors.password = 'Hasło musi mieć co najmniej 6 znaków';
+        if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) {
+            errors.email = 'Niepoprawny adres email';
+        }
+
+        if (!formData.password || formData.password.length < 8) {
+            errors.password = 'Hasło musi mieć co najmniej 8 znaków';
         }
 
         if (formData.password !== formData.repeatPassword) {
             errors.repeatPassword = 'Hasła muszą być identyczne';
-        }
-
-        if (!userType) {
-            errors.userType = 'Wybierz typ użytkownika';
         }
 
         if (Object.keys(errors).length > 0) {
@@ -58,18 +58,34 @@ const LoginPage = () => {
             return;
         }
 
-        console.log('Dane poprawne:', { ...formData, userType });
+        console.log('Dane poprawne:', { ...formData, selectedType });
         setFormErrors({});
     }
     
     return (
-        <Paper sx={{ maxWidth: 600, margin: '2rem auto', padding: 3 }}>
+        <Paper sx={{ maxWidth: 600, margin: '2rem auto'}}>
             
-            <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 900 }}>
+            <Typography mb={0} variant="h4" align="center" backgroundColor={"#2074d4"} color={"white"} gutterBottom sx={{ fontWeight: 900, padding: 3, borderTopLeftRadius: 3, borderTopRightRadius: 3}}>
                 Rejestracja
             </Typography>
 
-            <Box component="form" onSubmit={handleSubmit} display="flex" flexDirection="column" gap={2} marginTop={10}>
+            <ChooseUserType
+                types={types}
+                selectedType={selectedType}
+                setSelectedType={setSelectedType}
+            />
+
+            <Box component="form" onSubmit={handleSubmit} display="flex" flexDirection="column" gap={2} marginTop={2} padding={3}>
+                <TextField
+                    label="Nazwa użytkownika"
+                    name="username"
+                    type="text"
+                    value={formData.username}
+                    onChange={handleFormChange}
+                    error={!!formErrors.username}
+                    helperText={formErrors.username}
+                />
+
                 <TextField
                     label="Email"
                     name="email"
@@ -145,14 +161,11 @@ const LoginPage = () => {
                         </Typography>
                     )}
                 </FormControl>
-
-                <ChooseUserType
-                    types={types}
-                    setUserType={setUserType}
-                />
-                <Button type="submit" variant="contained" color="primary" onClick={handleSubmit}>
-                    Zaloguj
-                </Button>
+                <Box display="flex" justifyContent="center" margin={3}>
+                    <Button type="submit" variant="contained" color="primary" onClick={handleSubmit} sx={{ width: 200,fontSize: 16, fontWeight: 600}}>
+                        Zarejestruj
+                    </Button>
+                </Box>
             </Box>
         </Paper>
     );
