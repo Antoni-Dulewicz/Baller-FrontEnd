@@ -126,7 +126,29 @@ export async function getPlayerMatches(playerId) {
     throw new Error('Failed to get player matches');
   }
 
-  return response.json();
+  const data = await response.json();
+
+  let now = new Date();
+
+  const upcomingMatches = data.filter(match => {
+    const [year, month, day] = match.day.split("-").map(Number);
+    const [startHour, startMinute] = match.time_slot.split(" - ")[0].split(":").map(Number);
+
+    const matchDate = new Date(year, month - 1, day, startHour, startMinute);
+
+    return matchDate >= now;
+  });
+
+  const pastMatches = data.filter(match => {
+    const [year, month, day] = match.day.split("-").map(Number);
+    const [startHour, startMinute] = match.time_slot.split(" - ")[0].split(":").map(Number);
+
+    const matchDate = new Date(year, month - 1, day, startHour, startMinute);
+
+    return matchDate < now;
+  });
+
+  return [upcomingMatches, pastMatches];
 }
 
 export async function getRefereeMatches(refereeId) {
