@@ -166,25 +166,30 @@ export async function getRefereeMatches(refereeId) {
     throw new Error('Failed to get player matches');
   }
 
-  return response.json();
-}
+  const data = await response.json();
 
-export async function getEvent(eventId) {
-  const url = `${API_URL}/api/event/${eventId}`;
+  let now = new Date();
 
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-      Accept: 'application/json',
-    },
+  const upcomingMatches = data.filter(match => {
+    const [year, month, day] = match.day.split("-").map(Number);
+    const [startHour, startMinute] = match.time_slot.split(" - ")[0].split(":").map(Number);
+
+    const matchDate = new Date(year, month - 1, day, startHour, startMinute);
+
+    return matchDate >= now;
   });
 
-  if (!response.ok) {
-    throw new Error('Failed to get event');
-  }
+  const pastMatches = data.filter(match => {
+    const [year, month, day] = match.day.split("-").map(Number);
+    const [startHour, startMinute] = match.time_slot.split(" - ")[0].split(":").map(Number);
 
-  return response.json();
+    const matchDate = new Date(year, month - 1, day, startHour, startMinute);
+
+    return matchDate < now;
+  });
+
+  return [upcomingMatches, pastMatches];
+  
 
 }
 
