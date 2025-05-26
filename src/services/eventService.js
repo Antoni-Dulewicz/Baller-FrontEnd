@@ -1,5 +1,4 @@
-const isDocker = window.location.hostname === 'frontend';
-const API_URL = isDocker ? 'http://backend:8080' : 'http://localhost:8080';
+const API_URL = process.env.REACT_APP_API_URL;
 
 export async function getVenues() {
     return fetch(`${API_URL}/api/venue`).then(response => {
