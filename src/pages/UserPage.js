@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Calendar, Users, MapPin, Trophy, Medal, Clock } from 'lucide-react';
 import { Alert } from '@mui/material';
 import { getPlayerMatches, getEvents, getVenues } from '../services/eventService';
 
 const UserPage = () => {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('matches');
     const [events, setEvents] = useState([]);
     const [upcomingMatches, setUpcomingMatches] = useState([]);
@@ -83,11 +83,9 @@ const UserPage = () => {
         }
     };
 
-    // const getResultColor = (result) => {
-    //     if (result.includes('Won')) return 'bg-green-100 text-green-800';
-    //     if (result.includes('Lost')) return 'bg-red-100 text-red-800';
-    //     return 'bg-gray-100 text-gray-800';
-    // };
+    const handleOpenEventPage = (eventId) => {
+        navigate(`/event/${eventId}`);
+    }
 
     return (
         <div className="min-h-screen bg-blue-50">
@@ -181,7 +179,7 @@ const UserPage = () => {
                     
                     <button 
                         className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors"
-                        // onClick={() => handleOpenEventPage(event)}
+                        onClick={() => handleOpenEventPage(event.id)}
                     >
                         Zobacz szczegóły
                     </button>
