@@ -1,18 +1,34 @@
-import { Box, Button, Select, MenuItem, DialogContent, DialogActions } from '@mui/material';
-import { useState } from 'react';
+import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, Select, MenuItem } from '@mui/material';
 
-export function MatchProtocolForm({ players, handleClose }) {
+export function MatchProtocolForm({ open, handleClose, players }) {
     return (
-        <Box component="form" onSubmit={() => {}}>
-            <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <h1>Hello world</h1>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose}>Anuluj</Button>
-                <Button type="submit" variant="contained">
-                    Zapisz
-                </Button>
-            </DialogActions>
-        </Box>
+        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+            <DialogTitle>Wprowadź protokół meczu</DialogTitle>
+            <Box
+                component="form"
+                onSubmit={e => {
+                    e.preventDefault();
+                }}
+            >
+                <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <Select defaultValue="" displayEmpty>
+                        <MenuItem value="" disabled>
+                            Wybierz zawodnika
+                        </MenuItem>
+                        {players.map((player, idx) => (
+                            <MenuItem key={idx} value={player}>
+                                {player}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Anuluj</Button>
+                    <Button type="submit" variant="contained">
+                        Zapisz
+                    </Button>
+                </DialogActions>
+            </Box>
+        </Dialog>
     );
 }

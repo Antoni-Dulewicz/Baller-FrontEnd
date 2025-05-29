@@ -1,45 +1,34 @@
-import { useState, useEffect, Fragment } from 'react';
-import { Box, Button, Collapse } from '@mui/material';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Box, Button, Paper, CircularProgress } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
+import CancelIcon from '@mui/icons-material/Cancel';
 import { MatchProtocolForm } from '../components/UploadMatchProtocol/MatchProtocolForm';
 
 export function UploadMatchProtocol() {
     const [refereeMatches, setRefereeMatches] = useState([]);
-    const [openRowIndex, setOpenRowIndex] = useState();
+    const [openRowId, setOpenRowId] = useState(null);
+
     const refereeMatchez = [
         {
+            id: 1,
             day: '11-11-2022',
             timeslot: '8:00 - 8:45',
+            isSubmitted: false,
             participants: ['Wiktor Smaga', 'Antoni Dulewicz'],
         },
         {
+            id: 2,
             day: '13-11-2022',
             timeslot: '6:00 - 8:45',
+            isSubmitted: false,
             participants: ['Jakub Karczewski', 'Jakub Wisniewski'],
-        },
-    ];
-    const columns = [
-        {
-            header: 'Day',
-            accessor: 'day',
-        },
-        {
-            header: 'timeslot',
-            accessor: 'timeslot',
-        },
-        {
-            header: 'participants',
-            accessor: 'participants',
-        },
-        {
-            header: 'upload',
-            accessor: 'id',
         },
     ];
 
     useEffect(() => {
         const fetchRefereeMatches = async () => {
-            // const matches = await getRefereeMatches(1)
+            // const matches = await getRefereeMatches(1);
             const matches = refereeMatchez;
             if (matches) {
                 setRefereeMatches(matches);
@@ -48,45 +37,43 @@ export function UploadMatchProtocol() {
         fetchRefereeMatches();
     }, []);
 
-    const handleClose = () => {
-        setOpenRowIndex(null);
-    };
+    const columns = [
+        { field: 'day', headerName: 'Day', flex: 1 },
+        { field: 'timeslot', headerName: 'Timeslot', flex: 1 },
+        {
+            field: 'participants',
+            headerName: 'Participants',
+            flex: 2,
+            renderCell: params => <span>{params.row.participants.join(', ') || '—'}</span>,
+        },
+        {
+            field: 'isSubmitted',
+            headerName: 'Submitted',
+            renderCell: params => (params.row.isSubmitted ? <DoneOutlineIcon color="success" /> : <CancelIcon color="error" />),
+        },
+        {
+            field: 'actions',
+            headerName: 'Upload',
+            flex: 1,
+            renderCell: params => (
+                <Button variant="contained" onClick={() => setOpenRowId(params.row.id)}>
+                    Upload results
+                </Button>
+            ),
+        },
+    ];
+
+    const openMatch = refereeMatches.find(match => match.id === openRowId);
 
     return (
-        <>
-            <TableContainer component={Paper} sx={{ marginY: 2 }}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            {columns.map((col, idx) => (
-                                <TableCell key={idx}>{col.header}</TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
+        <Box sx={{ height: 400, width: '100%' }}>
+            <Paper sx={{ padding: 2, marginBottom: 2 }}>
+                <DataGrid rows={refereeMatches} columns={columns} disableRowSelectionOnClick />
+            </Paper>
 
-                    <TableBody>
-                        {refereeMatches.map((row, rowIdx) => (
-                            <Fragment key={rowIdx}>
-                                <TableRow>
-                                    <TableCell>{row.day}</TableCell>
-                                    <TableCell>{row.timeslot}</TableCell>
-                                    <TableCell>{row.participants}</TableCell>
-                                    <TableCell>
-                                        {openRowIndex === rowIdx ? (
-                                            <Button onClick={() => setOpenRowIndex(null)}>Discard</Button>
-                                        ) : (
-                                            <Button onClick={() => setOpenRowIndex(rowIdx)}>Upload results</Button>
-                                        )}
-                                    </TableCell>
-                                </TableRow>
-                                <Collapse in={openRowIndex === rowIdx}>
-                                    <MatchProtocolForm />
-                                </Collapse>
-                            </Fragment>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </>
+            {openMatch && (
+                <MatchProtocolForm open={Boolean(openRowId)} handleClose={() => setOpenRowId(null)} players={openMatch.participants} />
+            )}
+        </Box>
     );
 }
