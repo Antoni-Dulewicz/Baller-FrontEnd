@@ -1,10 +1,11 @@
-import Table from '../components/Table/Table';
-import { useState, useEffect } from 'react';
-import { Button } from '@mui/material';
-import { getRefereeMatches } from '../services/eventService';
+import { useState, useEffect, Fragment } from 'react';
+import { Box, Button, Collapse } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { MatchProtocolForm } from '../components/UploadMatchProtocol/MatchProtocolForm';
 
 export function UploadMatchProtocol() {
     const [refereeMatches, setRefereeMatches] = useState([]);
+    const [openRowIndex, setOpenRowIndex] = useState();
     const refereeMatchez = [
         {
             day: '11-11-2022',
@@ -33,7 +34,6 @@ export function UploadMatchProtocol() {
         {
             header: 'upload',
             accessor: 'id',
-            render: () => <Button>Upload results</Button>,
         },
     ];
 
@@ -48,5 +48,45 @@ export function UploadMatchProtocol() {
         fetchRefereeMatches();
     }, []);
 
-    return <Table data={refereeMatches} columns={columns} />;
+    const handleClose = () => {
+        setOpenRowIndex(null);
+    };
+
+    return (
+        <>
+            <TableContainer component={Paper} sx={{ marginY: 2 }}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            {columns.map((col, idx) => (
+                                <TableCell key={idx}>{col.header}</TableCell>
+                            ))}
+                        </TableRow>
+                    </TableHead>
+
+                    <TableBody>
+                        {refereeMatches.map((row, rowIdx) => (
+                            <Fragment key={rowIdx}>
+                                <TableRow>
+                                    <TableCell>{row.day}</TableCell>
+                                    <TableCell>{row.timeslot}</TableCell>
+                                    <TableCell>{row.participants}</TableCell>
+                                    <TableCell>
+                                        {openRowIndex === rowIdx ? (
+                                            <Button onClick={() => setOpenRowIndex(null)}>Discard</Button>
+                                        ) : (
+                                            <Button onClick={() => setOpenRowIndex(rowIdx)}>Upload results</Button>
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                                <Collapse in={openRowIndex === rowIdx}>
+                                    <MatchProtocolForm />
+                                </Collapse>
+                            </Fragment>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </>
+    );
 }
