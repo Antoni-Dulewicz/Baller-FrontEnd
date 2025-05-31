@@ -53,6 +53,23 @@ export async function getEvents() {
   return response.json();
 }
 
+export async function getEventsInfo(id) {
+  const url = `${API_URL}/api/eventinf/${id}`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      "Accept": "application/json"
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to get events');
+  }
+  return response.json();
+}
+
 export async function createVenue(formData) {
     const url = `${API_URL}/api/venue`;
 
