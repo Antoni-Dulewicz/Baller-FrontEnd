@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import PersonIcon from '@mui/icons-material/Person';
+import Breadcrumbs from '../components/Breadcrumbs/Breadcrumbs'; 
 
 export default function AdminLayout() {
   return (
@@ -10,7 +11,12 @@ export default function AdminLayout() {
           <PersonIcon />
         </button>
       </header>
-      <Outlet /> 
+
+      <Breadcrumbs />
+
+      <main className="flex-grow p-4">
+        <Outlet />
+      </main>
     </div>
   );
 }
