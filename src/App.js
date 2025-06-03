@@ -12,6 +12,8 @@ import MatchList from './pages/MatchList';
 import UserPage from './pages/UserPage';
 import EventRegistration from './pages/EventRegistration.js';
 import RefereePage from './pages/RefereePage.js';
+import LoginPage from './pages/LoginPage.js';
+import RegisterPage from './pages/RegisterPage.js';
 import EventDetails from './components/EventDetails.js'
 
 function App() {
@@ -25,19 +27,20 @@ function App() {
                 <Route path="/admin" element={<AdminPage/>} />
                 <Route path="/referee" element={<RefereePage/>} />
                 <Route path="/create-tournament" element={<CreateTournament/>} />
-                <Route path="/tournament" element={<TournamentLadder
+                {/* <Route path="/tournament" element={<TournamentLadder
                     name = {"Example Tournament Ladder"}
                     place = {"Hala AGH"}
                     date = {"09.05.2025"}
                 />} 
-                />
+                /> */}
                 <Route path="/matches/player" element={<MatchList />} />
                 <Route path="/matches/referee" element={<MatchList />} />
                 <Route path="/user" element={<UserPage/>} />
                 <Route path="/event-registration/player" element={<EventRegistration />} />
                 <Route path="/event-registration/referee" element={<EventRegistration />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
                 <Route path="/event/:id" element={<EventDetails />} />
-
             </Routes>
         </Router>
     );
