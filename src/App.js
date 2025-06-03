@@ -6,6 +6,7 @@ import EventsPage from './pages/EventsPage';
 import Schedule from './pages/Schedule';
 import AdminPage from './pages/AdminPage';
 import CreateTournament from './pages/CreateTournament';
+import AdminLayout from './layouts/AdminLayout.js';
 import TournamentLadder from './pages/TournamentLadder';
 import VenuesPage from './pages/VenuesPage';
 import MatchList from './pages/MatchList';
@@ -19,12 +20,14 @@ function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/referees" element={<AcceptReferees />} />
-                <Route path="/events" element={<EventsPage />} />
-                <Route path="/venues" element={<VenuesPage />} />
-                <Route path="/schedule" element={<Schedule />} />
-                <Route path="/admin" element={<AdminPage />} />
-                <Route path="/admin/protocol" element={<UploadMatchProtocol/>} />
+                <Route path="/admin" element={<AdminLayout />}>
+                    <Route index element={<AdminPage />} />
+                    <Route path="protocol" element={<UploadMatchProtocol />} />
+                    <Route path="events" element={<EventsPage />} />
+                    <Route path="referees" element={<AcceptReferees />} />
+                    <Route path="schedule" element={<Schedule />} />
+                    <Route path="venues" element={<VenuesPage />} />
+                </Route>
                 <Route path="/referee" element={<RefereePage />} />
                 <Route path="/create-tournament" element={<CreateTournament />} />
                 {/* <Route
