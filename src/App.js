@@ -15,11 +15,13 @@ import RefereePage from './pages/RefereePage.js';
 import LoginPage from './pages/LoginPage.js';
 import RegisterPage from './pages/RegisterPage.js';
 import EventDetails from './components/EventDetails.js'
+import HomePage from './pages/HomePage.js';
 
 function App() {
     return (
         <Router>
             <Routes>
+                <Route path="/" element={<HomePage />} />
                 <Route path="/referees" element={<AcceptReferees />} />
                 <Route path="/events" element={<EventsPage />} />
                 <Route path="/venues" element={<VenuesPage />} />

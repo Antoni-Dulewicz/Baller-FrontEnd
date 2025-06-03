@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Calendar, Users, MapPin, Trophy, Medal, Clock } from 'lucide-react';
 import { Alert } from '@mui/material';
 import { getPlayerMatches, getEvents, getVenues } from '../services/eventService';
+import Header from '../components/Header';
 
 const UserPage = () => {
     const navigate = useNavigate();
@@ -15,6 +16,12 @@ const UserPage = () => {
     // const [eventsNotEnrolledTo, setEventsNotEnrolledTo] = useState([]);
     const [error, setError] = useState(null);
     
+
+    const navigationElements = [
+        "Moje wydarzenia 1",
+        "Moje wydarzenia 2",
+    ]
+
 
 
     const userId = 4;
@@ -89,21 +96,10 @@ const UserPage = () => {
 
     return (
         <div className="min-h-screen bg-blue-50">
-        <header className="bg-blue-900 border-b border-blue-800 px-6 py-4">
-            <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <div className="flex items-center space-x-8">
-                <h1 className="text-xl font-semibold text-white">BallerIO</h1>
-                <nav className="flex space-x-6">
-                <span className="text-blue-200">Moje wydarzenia</span>
-                </nav>
-            </div>
-            <div className="flex items-center space-x-4">
-                <button className="p-2 text-blue-300 hover:text-white">
-                </button>
-                <button className="text-blue-200 hover:text-white">Wyloguj</button>
-            </div>
-            </div>
-        </header>
+        <Header
+            navigationElements={navigationElements}
+            userState={null}
+        />
 
         <div className="max-w-7xl mx-auto px-6 py-8">
             <div className="mb-8">
