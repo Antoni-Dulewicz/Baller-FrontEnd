@@ -13,6 +13,7 @@ import UserPage from './pages/UserPage';
 import EventRegistration from './pages/EventRegistration.js';
 import RefereePage from './pages/RefereePage.js';
 import { UploadMatchProtocol } from './pages/UploadMatchProtocol.js';
+import EventDetails from './components/EventDetails.js'
 
 function App() {
     return (
@@ -35,6 +36,8 @@ function App() {
                 <Route path="/user" element={<UserPage />} />
                 <Route path="/event-registration/player" element={<EventRegistration />} />
                 <Route path="/event-registration/referee" element={<EventRegistration />} />
+                <Route path="/event/:id" element={<EventDetails />} />
+
             </Routes>
         </Router>
     );

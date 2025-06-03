@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CustomTable from '../components/Table/Table';
 import { getVenues, createEvent, getEvents, updateEvent, deleteEvent } from '../services/eventService';
 import Header from '../components/Header';
@@ -8,6 +9,7 @@ import {
 } from '@mui/material';
 
 const AddEventForm = () => {
+    const navigate = useNavigate();
     const defaultFormData = {
         name: '',
         startDate: new Date().toISOString().slice(0, 10),
@@ -149,12 +151,24 @@ const AddEventForm = () => {
 
     }
 
+    const handleOpenEventPage = (event) => {
+        navigate(`/event/${event.id}`, {state: {event}});
+    }
     const toggleForm = () => {
         setIsFormOpen(!isFormOpen);
     };
 
     const columns = [
-        { header: 'Nazwa wydarzenia', accessor: 'name' },
+        {   
+            header: 'Nazwa wydarzenia', 
+            accessor: 'name',
+            render: (_, event) => (
+                <Button variant="contained" color="primary" onClick={() => handleOpenEventPage(event)}>
+                    {event.name}
+                </Button>
+            ),
+
+         },
         { header: 'Od', accessor: 'start_date' },
         { header: 'Do', accessor: 'end_date' },
         {
