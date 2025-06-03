@@ -24,6 +24,13 @@ export function UploadMatchProtocol() {
             isSubmitted: false,
             participants: ['Jakub Karczewski', 'Jakub Wisniewski'],
         },
+        {
+            id: 3,
+            day: '13-11-2022',
+            timeslot: '6:00 - 8:45',
+            isSubmitted: true,
+            participants: ['Jakub Karczewski', 'Jakub Wisniewski'],
+        },
     ];
 
     useEffect(() => {
@@ -49,7 +56,11 @@ export function UploadMatchProtocol() {
         {
             field: 'isSubmitted',
             headerName: 'Submitted',
-            renderCell: params => (params.row.isSubmitted ? <DoneOutlineIcon color="success" /> : <CancelIcon color="error" />),
+            renderCell: params => (
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
+                    {params.row.isSubmitted ? <DoneOutlineIcon color="success" /> : <CancelIcon color="error" />}
+                </Box>
+  ),
         },
         {
             field: 'actions',
