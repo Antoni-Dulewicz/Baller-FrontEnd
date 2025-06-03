@@ -3,6 +3,7 @@ import { Button, Box, Collapse } from '@mui/material';
 import CustomTable from '../components/Table/Table';
 import Header from '../components/Header';
 import { getReferees, acceptReferee } from '../services/eventService';
+import { User } from 'lucide-react';
 
 const AcceptReferees = () => {
 
@@ -62,12 +63,20 @@ const AcceptReferees = () => {
   }
 
   return (
-    <div>
-      <Header title="Sedziowie" />
-
+    <div className="flex flex-col min-h-screen bg-white-900 text-white">
+      <header className="bg-blue-900 p-4 flex justify-between items-center">
+        <h1 className="text-2xl font-bold pl-8">Sędziowie</h1>
+        <button className="p-2 rounded-full hover:bg-blue-800">
+          <User size={24} />
+        </button>
+      </header>
       <div style={{ padding: '2rem' }}>
         <h2>Oczekujący sędziowie</h2>
-        <CustomTable data={notApprovedReferees} columns={columnsNotAccepted} />
+        <CustomTable 
+          data={notApprovedReferees} 
+          columns={columnsNotAccepted} 
+          rowColor={() => '#fffbe6'} // jasny żółty dla niezaakceptowanych
+        />
         <h2>Zakceptowani sędziowie</h2>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem' }}>
             <Button 
@@ -79,10 +88,14 @@ const AcceptReferees = () => {
             </Button>
         </Box>
         <Collapse in={isTableOpen}>
-          <CustomTable data={approvedReferees} columns={columnsAccepted} />
+          <CustomTable 
+            data={approvedReferees} 
+            columns={columnsAccepted} 
+            rowColor={() => '#e6fff2'} // jasny zielony dla zaakceptowanych
+          />
         </Collapse>
       </div>
-    </div>
+      </div>
   );
 };
 
