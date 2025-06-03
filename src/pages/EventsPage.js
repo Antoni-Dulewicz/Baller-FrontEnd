@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CustomTable from '../components/Table/Table';
 import { getVenues, createEvent, getEvents, updateEvent, deleteEvent } from '../services/eventService';
-import Header from '../components/Header';
+import AdminHeader from '../components/headers/AdminHeader';
 import { 
     Box, Button, TextField, Typography, Paper, Select, MenuItem, Collapse,
     Dialog, DialogTitle, DialogContent, DialogActions, Alert
@@ -193,7 +193,7 @@ const AddEventForm = () => {
 
     return (
         <div>        
-            <Header title="Wydarzenia" />
+            <AdminHeader title="Wydarzenia" />
 
             <Dialog open={editorOpen} onClose={handleClose}>
                 <DialogTitle>Dane</DialogTitle>

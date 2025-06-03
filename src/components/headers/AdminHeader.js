@@ -1,8 +1,9 @@
 import { User, Menu, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import TopHeader from './TopHeader';
 
-const Header = ({ title }) => {
+const AdminHeader = ({ title }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -21,26 +22,12 @@ const Header = ({ title }) => {
   ];
 
   return (
-    <header className="p-4 bg-white shadow-sm">
-      {/* Top bar with title, menu toggle and user icon */}
-      <div className="w-full flex justify-between items-center">
-        <h1 className="text-xl md:text-2xl font-bold">{title}</h1>
-        
-        <div className="flex items-center gap-2">          
-          {/* Mobile menu toggle */}
-          <button 
-            className="p-2 rounded-full hover:bg-gray-100 lg:hidden" 
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-
-          {/* User icon - always visible */}
-          <button className="p-2 rounded-full hover:bg-gray-100">
-            <User size={24} />
-          </button>
-        </div>
-      </div>
+    <header>
+      <TopHeader 
+        title={title}
+        isMenuOpen={isMenuOpen}
+        setIsMenuOpen={setIsMenuOpen}
+      />
 
       {/* Navigation - three different layouts based on screen size */}
       <nav className={`
@@ -91,4 +78,4 @@ const Header = ({ title }) => {
   );
 };
 
-export default Header;
+export default AdminHeader;
