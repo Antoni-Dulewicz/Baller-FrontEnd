@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getUpcomingEvents, registerToEvent, registerRefereeToEvent } from '../services/eventService';
 import { AlertCircle, CalendarCheck } from 'lucide-react';
+import { Box, Button,Collapse } from '@mui/material';
 import UserHeader from '../components/UserHeader';
 import RefereeHeader from '../components/RefereeHeader';
 
@@ -11,8 +12,11 @@ const refereeId = 7;
 const EventRegistration = () => {
   const location = useLocation();
   const [events, setEvents] = useState([]);
+  const [eventsEnrolledTo, setEventsEnrolledTo] = useState([]);
+  const [eventsNotEnrolledTo, setEventsNotEnrolledTo] = useState([]);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [isTableOpen, setIsTableOpen] = useState(false);
 
   const isReferee = location.pathname.includes('/event-registration/referee');
 
@@ -25,7 +29,13 @@ const EventRegistration = () => {
     try {
       setError(null);
       const data = await getUpcomingEvents();
+      const dataEnrolledTo = data.filter(event => event.participants.includes(userId));
+      const dataNotEnrolledTo = data.filter(event => !event.participants.includes(userId));
       setEvents(data);
+      setEventsEnrolledTo(dataEnrolledTo);
+      setEventsNotEnrolledTo(dataNotEnrolledTo);
+
+      console.log(data);
     } catch (err) {
       setError('Nie udało się załadować dostępnych wydarzeń.');
     }
@@ -42,10 +52,15 @@ const EventRegistration = () => {
         await registerToEvent(eventId, userId);
         setSuccess(`Zarejestrowano zawodnika do wydarzenia`);
       }
+      loadEvents();
     } catch (err) {
       setError(`Nie udało się zapisać: ${err.message}`);
     }
   };
+
+  const toggleTable = () => {
+        setIsTableOpen(!isTableOpen);
+    };
 
   return (
     <div>
@@ -70,11 +85,11 @@ const EventRegistration = () => {
             </div>
             )}
 
-            {events.length === 0 ? (
+            {eventsNotEnrolledTo.length === 0 ? (
             <p className="text-gray-700">Brak dostępnych turniejów do rejestracji.</p>
             ) : (
             <div className="grid gap-4 md:grid-cols-2">
-                {events.map(event => (
+                {eventsNotEnrolledTo.map(event => (
                 <div
                     key={event.id}
                     className="border border-gray-300 rounded-xl p-6 shadow-sm flex flex-col justify-between"
@@ -93,6 +108,40 @@ const EventRegistration = () => {
                 ))}
             </div>
             )}
+            
+            <div style={{ padding: '2rem' }}>
+              <h2>Moje wydarzenia</h2>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem' }}>
+                  <Button 
+                      variant="contained" 
+                      color="primary" 
+                      onClick={toggleTable}
+                  >
+                      {isTableOpen ? 'Zwiń' : 'Rozwiń'}
+                  </Button>
+              </Box>
+              <Collapse in={isTableOpen}>
+                {eventsEnrolledTo.length === 0 ? (
+                  <p className="text-gray-700">Brak dostępnych turniejów do rejestracji.</p>
+                  ) : (
+                  <div className="grid gap-4 md:grid-cols-2">
+                      {eventsEnrolledTo.map(event => (
+                      <div
+                          key={event.id}
+                          className="border border-gray-300 rounded-xl p-6 shadow-sm flex flex-col justify-between"
+                      >
+                        <div>
+                        <h2 className="text-xl font-semibold mb-2">{event.name}</h2>
+                        <p className="text-sm text-gray-600">Od: {event.start_date} &nbsp; | &nbsp;Do: {event.end_date}</p>
+                        </div>
+                      </div>
+                      ))}
+                  </div>
+                  )}
+              </Collapse>
+            </div>
+
+            
         </main>
         </div>
     </div>

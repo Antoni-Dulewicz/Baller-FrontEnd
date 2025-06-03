@@ -14,6 +14,7 @@ import EventRegistration from './pages/EventRegistration.js';
 import RefereePage from './pages/RefereePage.js';
 import LoginPage from './pages/LoginPage.js';
 import RegisterPage from './pages/RegisterPage.js';
+import EventDetails from './components/EventDetails.js'
 
 function App() {
     return (
@@ -39,6 +40,7 @@ function App() {
                 <Route path="/event-registration/referee" element={<EventRegistration />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
+                <Route path="/event/:id" element={<EventDetails />} />
             </Routes>
         </Router>
     );
