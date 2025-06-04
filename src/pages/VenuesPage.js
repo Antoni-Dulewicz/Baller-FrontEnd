@@ -5,6 +5,8 @@ import {
     MenuItem, Grid, Card, CardContent, formError, Alert, 
     Collapse } from '@mui/material';
 import { createVenue, getVenues } from '../services/eventService';
+import CardMedia from '@mui/material/CardMedia';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 const VenuesPage = () => {
 
@@ -106,7 +108,7 @@ const VenuesPage = () => {
                 </Paper>
             </Collapse>
 
-            <Paper sx={{ maxWidth: 800, margin: '2rem auto', padding: 3 }}>
+            {/* <Paper sx={{ maxWidth: 800, margin: '2rem auto', padding: 3 }}>
                 <Typography variant="h5" gutterBottom>
                     Istniejące obiekty
                 </Typography>
@@ -138,9 +140,69 @@ const VenuesPage = () => {
                         </Grid>
                     ))}
                 </Grid>
+            </Paper> */}
+
+
+            <Paper sx={{ maxWidth: 900, margin: '2rem auto', padding: 3, boxShadow: 3 }}>
+                <Typography variant="h4" gutterBottom sx={{ mb: 3, fontWeight: 'bold' }}>
+                    Istniejące obiekty
+                </Typography>
+                
+                {error && (
+                    <Alert severity="error" sx={{ mb: 3 }}>
+                    {error}
+                    </Alert>
+                )}
+
+                <Grid container spacing={4}>
+                    {venues.map((venue) => (
+                    <Grid item xs={12} sm={6} md={4} key={venue.id}>
+                        <Card 
+                        variant="outlined" 
+                        sx={{
+                            transition: 'box-shadow 0.3s',
+                            '&:hover': { boxShadow: 6 },
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                        }}
+                        >
+                        <CardMedia
+                            component="img"
+                            height="140"
+                            image = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Stadion_Miejski_Krak%C3%B3w_2023.jpg/1200px-Stadion_Miejski_Krak%C3%B3w_2023.jpg"
+                            alt={venue.name}
+                        />
+                        
+                        <CardContent sx={{ flexGrow: 1 }}>
+                            <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
+                            {venue.name}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                            <LocationOnIcon sx={{ fontSize: 20, mr: 0.5 }} />
+                            {venue.location}
+                            </Typography>
+                            {venue.description && (
+                            <Typography variant="body2" sx={{ mt: 1 }}>
+                                {venue.description}
+                            </Typography>
+                            )}
+                        </CardContent>
+
+                        {/* Optional actions like edit/delete */}
+                        {/* <CardActions>
+                            <Button size="small" color="primary">Edit</Button>
+                            <Button size="small" color="secondary">Delete</Button>
+                        </CardActions> */}
+
+                        </Card>
+                    </Grid>
+                    ))}
+                </Grid>
             </Paper>
         </div>
     );
+
 };
 
 export default VenuesPage;

@@ -38,10 +38,12 @@ const CustomTable = ({ data, columns, rowColor }) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = event => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+  const handleChangeRowsPerPage = (event) => {
+    const value = parseInt(event.target.value, 10);
+    console.log('Nowa liczba wierszy na stronę:', value);
+    setRowsPerPage(value);
     setPage(0);
-  };
+};
 
   return (
     <Paper sx={{ marginY: 2, padding: 2 }}>
@@ -61,7 +63,8 @@ const CustomTable = ({ data, columns, rowColor }) => {
               {columns.map((col, idx) => (
                 <TableCell
                   key={idx}
-                  align={col.align || 'left'}
+                  //align={col.align || 'left'}
+                  align="center"
                   sx={{ borderRight: idx !== columns.length - 1 ? '1px solid #e0e0e0' : 'none', fontWeight: 'bold', background: '#e3e9f6' }}
                 >
                   {col.header}
@@ -81,7 +84,8 @@ const CustomTable = ({ data, columns, rowColor }) => {
                 {columns.map((col, colIdx) => (
                   <TableCell
                     key={colIdx}
-                    align={col.align || 'left'}
+                    //align={col.align || 'left'}
+                    align = "center"
                     sx={{ borderRight: colIdx !== columns.length - 1 ? '1px solid #e0e0e0' : 'none' }}
                   >
                     {col.render
@@ -102,6 +106,7 @@ const CustomTable = ({ data, columns, rowColor }) => {
         rowsPerPage={rowsPerPage}
         onRowsPerPageChange={handleChangeRowsPerPage}
         labelRowsPerPage="Wierszy na stronę:"
+        rowsPerPageOptions={[5, 10, 20, 50]}
       />
     </Paper>
   );

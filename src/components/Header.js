@@ -23,8 +23,15 @@ const Header = ({ title }) => {
   return (
     <header className="p-4 bg-white shadow-sm">
       {/* Top bar with title, menu toggle and user icon */}
-      <div className="w-full flex justify-between items-center">
-        <h1 className="text-xl md:text-2xl font-bold">{title}</h1>
+       <div className="bg-blue-900 py-8 px-4 flex items-center justify-center relative">
+        <h1 className="text-2xl text-white font-bold absolute left-1/2 transform -translate-x-1/2">
+        {title}
+        </h1>
+        <div className="absolute right-4">
+          <button className="p-2 rounded-full hover:bg-blue-800">
+            <User size={24} color="white" />
+          </button>
+        </div>
         
         <div className="flex items-center gap-2">          
           {/* Mobile menu toggle */}
@@ -33,12 +40,7 @@ const Header = ({ title }) => {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-
-          {/* User icon - always visible */}
-          <button className="p-2 rounded-full hover:bg-gray-100">
-            <User size={24} />
-          </button>
+          </button>   
         </div>
       </div>
 
