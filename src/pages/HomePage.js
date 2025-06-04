@@ -1,11 +1,18 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import "../Animations.css";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
     const navigationElements = [
 
     ]
+
+    const navigate = useNavigate();
+
+    const handleButtonClick = (path) => {
+        navigate(path);
+    };
 
     return (
         <div className="min-h-screen bg-blue-50">
@@ -13,7 +20,7 @@ const HomePage = () => {
                 navigationElements={navigationElements}
                 userState={null}
             />
-            <div className="relative h-screen bg-fixed bg-center bg-cover z-10 flex justify-center items-center" style={{ backgroundImage: "url('home.jpg')" }}>
+            <div className="relative h-screen bg-fixed bg-center bg-cover z-10 flex justify-center items-center" style={{ backgroundImage: 'url("/home.jpg")' }}>
                 <div className="h-1/2 flex flex-col justify-evenly text-blue-50 font-bold drop-shadow-[0_0_2px_rgba(0,0,0,1)]">
                     <h1 className="text-7xl">Wejdź do gry już teraz!</h1>
                     <h2 className="text-3xl">trenuj, ćwicz, wygrywaj</h2>
@@ -39,8 +46,8 @@ const HomePage = () => {
                             Z nami każda gra to początek czegoś wielkiego!
                         </p>
                         <button 
-                            className="mt-10 text-2xl bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md font-medium transition-colors"
-                            onClick={() => console.log()}
+                            className="mt-10 text-2xl p-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md font-medium transition-colors"
+                            onClick={() => handleButtonClick("/login")}
                         >
                             Dołącz do gry!
                         </button>
