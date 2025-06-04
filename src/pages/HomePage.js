@@ -13,8 +13,14 @@ const HomePage = () => {
                 navigationElements={navigationElements}
                 userState={null}
             />
-            <div className="min-h-screen">
-                Wejdź do gry już teraz!
+            <div className="relative h-screen bg-fixed bg-center bg-cover z-10 flex justify-center items-center" style={{ backgroundImage: "url('home.jpg')" }}>
+                <div className="h-1/2 flex flex-col justify-evenly text-blue-50 font-bold drop-shadow-[0_0_2px_rgba(0,0,0,1)]">
+                    <h1 className="text-7xl">Wejdź do gry już teraz!</h1>
+                    <h2 className="text-3xl">trenuj, ćwicz, wygrywaj</h2>
+                </div>
+            </div>
+            <div className="min-h-screen w-5xl">
+                
                 Wejdź do gry już teraz i przeżyj sportowe emocje na najwyższym poziomie!
 
                 W [Nazwa Firmy] specjalizujemy się w organizacji profesjonalnych wydarzeń ping pongowych i tenisowych, które łączą pasję, rywalizację i świetną atmosferę. Dbamy o każdy detal, aby każdy mecz był wyjątkowym doświadczeniem dla zawodników i kibiców.
