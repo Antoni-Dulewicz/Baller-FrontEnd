@@ -1,6 +1,6 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-
+import "../Animations.css";
 
 const HomePage = () => {
     const navigationElements = [
@@ -19,24 +19,33 @@ const HomePage = () => {
                     <h2 className="text-3xl">trenuj, ćwicz, wygrywaj</h2>
                 </div>
             </div>
-            <div className="min-h-screen w-5xl">
-                
-                Wejdź do gry już teraz i przeżyj sportowe emocje na najwyższym poziomie!
-
-                W [Nazwa Firmy] specjalizujemy się w organizacji profesjonalnych wydarzeń ping pongowych i tenisowych, które łączą pasję, rywalizację i świetną atmosferę. Dbamy o każdy detal, aby każdy mecz był wyjątkowym doświadczeniem dla zawodników i kibiców.
-
-                Choć na razie skupiamy się na tenisie stołowym i tenisie ziemnym, nieustannie rozwijamy się i jesteśmy gotowi na nowe wyzwania – wkrótce w naszej ofercie pojawią się kolejne dyscypliny sportowe.
-
-                Dołącz do nas i poczuj, jak sport może inspirować, integrować i motywować do działania!
-
-                Z nami każda gra to początek czegoś wielkiego!
-
-                <button 
-                    className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors"
-                    onClick={() => console.log()}
-                >
-                    Dołącz do gry!
-                </button>
+            <div className="animated-appearance">
+                <div className="py-40 w-2/3 m-auto text-center">
+                    
+                    <h2 className="font-bold text-4xl mb-20 text-blue-600">
+                        Przeżyj sportowe emocje na najwyższym poziomie!
+                    </h2>
+                    <div className="w-3/5 m-auto [&>p]:text-lg [&>p]:mb-4">
+                        <p>
+                            W [Nazwa Firmy] specjalizujemy się w organizacji profesjonalnych wydarzeń ping pongowych i tenisowych, które łączą pasję, rywalizację i świetną atmosferę. Dbamy o każdy detal, aby każdy mecz był wyjątkowym doświadczeniem dla zawodników i kibiców.
+                        </p>
+                        <p>
+                            Choć na razie skupiamy się na tenisie stołowym i tenisie ziemnym, nieustannie rozwijamy się i jesteśmy gotowi na nowe wyzwania – wkrótce w naszej ofercie pojawią się kolejne dyscypliny sportowe.
+                        </p>
+                        <p>
+                            Dołącz do nas i poczuj, jak sport może inspirować, integrować i motywować do działania!
+                        </p>
+                        <p>
+                            Z nami każda gra to początek czegoś wielkiego!
+                        </p>
+                        <button 
+                            className="mt-10 text-2xl bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md font-medium transition-colors"
+                            onClick={() => console.log()}
+                        >
+                            Dołącz do gry!
+                        </button>
+                    </div>
+                </div>
             </div>
             <Footer>
 
