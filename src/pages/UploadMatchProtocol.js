@@ -4,49 +4,25 @@ import { DataGrid } from '@mui/x-data-grid';
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { MatchProtocolForm } from '../components/UploadMatchProtocol/MatchProtocolForm';
+import { getRefereeMatches } from '../services/eventService'
 
 export function UploadMatchProtocol() {
     const [refereeMatches, setRefereeMatches] = useState([]);
     const [openRowId, setOpenRowId] = useState(null);
 
-    const refereeMatchez = [
-        {
-            id: 1,
-            day: '11-11-2022',
-            timeslot: '8:00 - 8:45',
-            isSubmitted: false,
-            participants: ['Wiktor Smaga', 'Antoni Dulewicz'],
-        },
-        {
-            id: 2,
-            day: '13-11-2022',
-            timeslot: '6:00 - 8:45',
-            isSubmitted: false,
-            participants: ['Jakub Karczewski', 'Jakub Wisniewski'],
-        },
-        {
-            id: 3,
-            day: '13-11-2022',
-            timeslot: '6:00 - 8:45',
-            isSubmitted: true,
-            participants: ['Jakub Karczewski', 'Jakub Wisniewski'],
-        },
-    ];
-
     useEffect(() => {
         const fetchRefereeMatches = async () => {
-            // const matches = await getRefereeMatches(1);
-            const matches = refereeMatchez;
-            if (matches) {
-                setRefereeMatches(matches);
-            }
+            const [upcomingMatches, pastMatches]= await getRefereeMatches(7);
+            const matches = upcomingMatches.concat(pastMatches)
+            console.log(matches)
+            setRefereeMatches(matches);
         };
         fetchRefereeMatches();
     }, []);
 
     const columns = [
         { field: 'day', headerName: 'Day', flex: 1 },
-        { field: 'timeslot', headerName: 'Timeslot', flex: 1 },
+        { field: 'timeSlot', headerName: 'Timeslot', flex: 1 },
         {
             field: 'participants',
             headerName: 'Participants',
