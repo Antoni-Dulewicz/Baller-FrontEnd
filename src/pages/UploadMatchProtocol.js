@@ -27,7 +27,7 @@ export function UploadMatchProtocol() {
             field: 'participants',
             headerName: 'Participants',
             flex: 2,
-            renderCell: params => <span>{params.row.participants.join(', ') || '—'}</span>,
+            renderCell: params => <span>{params.row.participants.map(p => p.name).join(', ') || '—'}</span>,
         },
         {
             field: 'isSubmitted',

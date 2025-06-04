@@ -47,14 +47,14 @@ export function MatchProtocolForm({ open, handleClose, players }) {
             <MenuItem value="" disabled>
               Wybierz zwycięzcę
             </MenuItem>
-            {players.map((player, idx) => (
-              <MenuItem key={idx} value={player}>
-                {player}
+            {players.map(({id, name}) => (
+              <MenuItem key={id} value={name}>
+              {name}
               </MenuItem>
             ))}
           </Select>
             <Typography variant="body2" color="textSecondary">
-                Format: <strong>{players[0]}</strong> : <strong>{players[1]}</strong>
+                Format: <strong>{players[0].name}</strong> : <strong>{players[1].name}</strong>
             </Typography>
             
           <TextField
