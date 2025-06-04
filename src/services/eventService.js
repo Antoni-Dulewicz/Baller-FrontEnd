@@ -1,3 +1,5 @@
+import { transformKeysToCamelCase } from "../utils/snakeToCamel";
+
 const isDocker = window.location.hostname === 'frontend';
 const API_URL = isDocker ? 'http://backend:8080' : 'http://localhost:8080';
 
@@ -167,30 +169,23 @@ export async function getRefereeMatches(refereeId) {
   }
 
   const data = await response.json();
+  const now = new Date();
 
-  let now = new Date();
-
-  const upcomingMatches = data.filter(match => {
+  const parseMatchDate = (match) => {
     const [year, month, day] = match.day.split("-").map(Number);
     const [startHour, startMinute] = match.time_slot.split(" - ")[0].split(":").map(Number);
+    return new Date(year, month - 1, day, startHour, startMinute);
+  };
 
-    const matchDate = new Date(year, month - 1, day, startHour, startMinute);
+  const upcomingMatches = data
+    .filter((match) => parseMatchDate(match) >= now)
+    .map(transformKeysToCamelCase);
 
-    return matchDate >= now;
-  });
-
-  const pastMatches = data.filter(match => {
-    const [year, month, day] = match.day.split("-").map(Number);
-    const [startHour, startMinute] = match.time_slot.split(" - ")[0].split(":").map(Number);
-
-    const matchDate = new Date(year, month - 1, day, startHour, startMinute);
-
-    return matchDate < now;
-  });
+  const pastMatches = data
+    .filter((match) => parseMatchDate(match) < now)
+    .map(transformKeysToCamelCase);
 
   return [upcomingMatches, pastMatches];
-  
-
 }
 
 export async function getVenue(venueId) {
