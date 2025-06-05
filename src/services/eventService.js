@@ -54,8 +54,8 @@ export async function getEvents() {
   return response.json();
 }
 
-export async function getEventsInfo(id) {
-  const url = `${API_URL}/api/eventinf/${id}`;
+export async function getEventInfo(id) {
+  const url = `${API_URL}/api/event/${id}`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -351,4 +351,25 @@ export async function getUpcomingEvents() {
   const today = new Date().toISOString().split('T')[0];
 
   return events.filter(event => event.start_date > today);
+}
+
+export async function getEventUpcomingMatches(eventId) {
+  const url = `${API_URL}/api/matches/${eventId}`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Accept": "application/json"
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Nie udało się pobrać listy turniejów");
+  }
+  
+  const matches = await response.json();
+  return matches
+  // const today = new Date().toISOString().split('T')[0];
+
+  // return matches.filter(event => event.start_date > today);
 }
