@@ -98,22 +98,22 @@ function App() {
                             <AdminPage />
                         </RoutingPersonalRules>
                     } />
-                    <Route path="/referees" element={
+                    <Route path="/admin/referees" element={
                         <RoutingPersonalRules allowedRoles={['admin']}>
                             <AcceptReferees />
                         </RoutingPersonalRules>
                     } />
-                    <Route path="/create-tournament" element={
+                    <Route path="/admin/create-tournament" element={
                         <RoutingPersonalRules allowedRoles={['admin']}>
                             <CreateTournament />
                         </RoutingPersonalRules>
                     } />
-                    <Route path="/schedule" element={
+                    <Route path="/admin/schedule" element={
                         <RoutingPersonalRules allowedRoles={['admin']}>
                             <Schedule />
                         </RoutingPersonalRules>
                     } />
-                    <Route path="/venues" element={
+                    <Route path="/admin/venues" element={
                         <RoutingPersonalRules allowedRoles={['admin']}>
                             <Schedule />
                         </RoutingPersonalRules>
