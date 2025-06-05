@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Box, Collapse } from '@mui/material';
 import CustomTable from '../components/Table/Table';
-import Header from '../components/Header';
+import AdminHeader from '../components/headers/AdminHeader';
 import { getReferees, acceptReferee } from '../services/eventService';
 
 const AcceptReferees = () => {
@@ -63,7 +63,7 @@ const AcceptReferees = () => {
 
   return (
     <div>
-      <Header title="Sedziowie" />
+      <AdminHeader title="Sedziowie" />
 
       <div style={{ padding: '2rem' }}>
         <h2>Oczekujący sędziowie</h2>

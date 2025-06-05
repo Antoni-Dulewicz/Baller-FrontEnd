@@ -1,29 +1,20 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Calendar, Users, MapPin, Clock, Trophy, Medal, ArrowLeft, Star } from 'lucide-react';
+import { getEventsInfo } from '../services/eventService';
 
 const EventDetails = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [activeTab, setActiveTab] = useState('overview');
+  const [eventInfo, setEventInfo] = useState({});
+  const [error, setError] = useState(null);
 
-  const eventInfo = {
-    name: "Mistrzostwa AGH",
-    sport: "Tennis",
-    dates: "2025-04-10 to 2025-04-17",
-    players: 16,
-    prize: "2.000PLN",
-    location: "Kraków",
-    courts: 4,
-    status: "W trakcie",
-    organizer: "Akademia Górniczo Hutnicza",
-    registrationFee: "150PLN",
-    maxPlayers: 16,
-    currentPlayers: 12,
-    description: `Turniej tenisowy AGH to coroczna impreza sportowa organizowana na terenie Akademii Górniczo-Hutniczej w Krakowie. 
-    Biorą w niej udział studenci, pracownicy uczelni oraz zaproszeni goście, rywalizując w kategoriach singlowych i deblowych. 
-    Zawody odbywają się na uczelnianych kortach, a celem jest nie tylko sportowa rywalizacja, ale też integracja środowiska akademickiego. 
-    Turniej cieszy się rosnącą popularnością i wspierany jest przez Samorząd Studentów oraz sekcję sportową AGH.`
-  };
+  useEffect(() => {
+    fetchData()
+  }, [id]);
+
+  const daysLeft = eventInfo.endDate ? Math.ceil((new Date(eventInfo.endDate) - new Date()) / (1000 * 60 * 60 * 24)) : 7;
 
   const completedMatches = [
     {
@@ -124,6 +115,22 @@ const EventDetails = () => {
     navigate(`/user`);
   }
 
+  const fetchData = async () => {
+      try {
+        const data = await getEventsInfo(id);
+        setEventInfo(data);
+      } catch (err) {
+        setError("Nie udało się pobrać danych turnieju.");
+        console.error(err); 
+    };
+  }
+  
+  
+
+  if (!eventInfo.description) {
+  return <div>Loading event info...</div>;
+}
+
   return (
     <div className="min-h-screen bg-blue-50">
       {/* Header */}
@@ -165,7 +172,7 @@ const EventDetails = () => {
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
             <div className="text-center p-3 bg-blue-50 rounded-lg">
-              <div className="text-2xl font-bold text-blue-900">{eventInfo.currentPlayers}</div>
+              <div className="text-2xl font-bold text-blue-900">{eventInfo.current_players}</div>
               <div className="text-sm text-blue-600">Zarejestrowani gracze</div>
             </div>
             <div className="text-center p-3 bg-blue-50 rounded-lg">
@@ -177,7 +184,7 @@ const EventDetails = () => {
               <div className="text-sm text-blue-600">Liczba kortow</div>
             </div>
             <div className="text-center p-3 bg-blue-50 rounded-lg">
-              <div className="text-2xl font-bold text-blue-900">7</div>
+              <div className="text-2xl font-bold text-blue-900">{daysLeft}</div>
               <div className="text-sm text-blue-600">Dni do końca</div>
             </div>
           </div>
@@ -234,7 +241,7 @@ const EventDetails = () => {
                     <div className="flex items-center text-blue-700">
                       <Users className="w-4 h-4 mr-2 text-blue-500" />
                       <span className="text-sm font-medium">Liczba graczy:</span>
-                      <span className="ml-2 text-sm">{eventInfo.currentPlayers}/{eventInfo.maxPlayers}</span>
+                      <span className="ml-2 text-sm">{eventInfo.current_players}/{eventInfo.max_players}</span>
                     </div>
                     <div className="flex items-center text-blue-700">
                       <Trophy className="w-4 h-4 mr-2 text-blue-500" />
@@ -256,7 +263,7 @@ const EventDetails = () => {
                     <div className="flex items-center text-blue-700">
                       <Star className="w-4 h-4 mr-2 text-blue-500" />
                       <span className="text-sm font-medium">Wpisowe:</span>
-                      <span className="ml-2 text-sm">{eventInfo.registrationFee}</span>
+                      <span className="ml-2 text-sm">{eventInfo.registration_fee}</span>
                     </div>
                   </div>
                 </div>
