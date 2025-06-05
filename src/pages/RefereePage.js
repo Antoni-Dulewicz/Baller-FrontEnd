@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, Users, MapPin, Trophy, Medal, Clock } from 'lucide-react';
 import { Alert } from '@mui/material';
-import { getRefereeMatches, getEvents, getVenues } from '../services/eventService';
+import { getRefereeMatches, getEvents, getVenues, registerRefereeToEvent } from '../services/eventService';
 import Header from '../components/Header';
 
 const RefereePage = () => {
@@ -17,6 +17,9 @@ const RefereePage = () => {
     // const [eventsEnrolledTo, setEventsEnrolledTo] = useState([]);
     // const [eventsNotEnrolledTo, setEventsNotEnrolledTo] = useState([]);
     const [error, setError] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
+
     
 
     const navigationElements = [
@@ -51,8 +54,8 @@ const RefereePage = () => {
             const [upcomingMatches, pastMatches] = await getRefereeMatches(refereeId);
             setUpcomingMatches(upcomingMatches);
             setPastMatches(pastMatches);
-            console.log(upcomingMatches);
-            console.log(pastMatches);
+            console.log("aaaaaaaaa", upcomingMatches);
+            console.log("aaaaaaa", pastMatches);
             
         } catch (err) {
             setError('Nie udało się załadować dostępnych wydarzeń.');
@@ -68,6 +71,18 @@ const RefereePage = () => {
             
         } catch (err) {
             setError('Nie udało się załadować dostępnych obiektow.');
+        }
+    };
+
+    const handleRegister = async (eventId) => {
+        try {
+            await registerRefereeToEvent(eventId, refereeId);
+            setModalMessage('Pomyślnie zarejestrowano na wydarzenie.');
+        } catch (err) {
+            setModalMessage('Nie udało się zarejestrować na wydarzenie.');
+        } finally {
+            setIsModalOpen(true);
+            await fetchEvents();
         }
     };
 
@@ -189,6 +204,14 @@ const RefereePage = () => {
                     >
                         Zobacz szczegóły
                     </button>
+                    {event.status === 'Planning' && !event.referees.includes(refereeId) && (
+                        <button 
+                            className="w-full mt-2 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors"
+                            onClick={() => handleRegister(event.id)}
+                        >
+                            Zarejestruj się
+                        </button>
+                    )}
                 </div> 
                 ))}
             </div>
@@ -210,10 +233,10 @@ const RefereePage = () => {
                         <div className="flex justify-between items-start mb-4">
                         <div className="flex-1">
                             <h3 className="text-lg font-semibold text-blue-900 mb-1">{match.tournament}</h3>
-                            <p className="text-blue-600">{match.participants_names}</p>
+                            <p className="text-blue-600">{match.participantsNames}</p>
                         </div>
                         <span className="bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-medium">
-                            {venues[match.venue_id]["name"]}
+                            {venues[match.venueId]["name"]}
                         </span>
                         </div>
                         
@@ -224,11 +247,11 @@ const RefereePage = () => {
                         </div>
                         <div className="flex items-center">
                             <Clock className="w-4 h-4 mr-2 text-blue-500" />
-                            {match.time_slot}
+                            {match.timeSlot}
                         </div>
                         <div className="flex items-center">
                             <MapPin className="w-4 h-4 mr-2 text-blue-500" />
-                            {venues.find(v => v.id === match.venue_id)?.location || "Nieznany obiekt"}
+                            {venues.find(v => v.id === match.venueId)?.location || "Nieznany obiekt"}
                         </div>
                         <div className="text-blue-500">
                             Referees: {match.referees_names.map(name => name + " ")}
@@ -253,9 +276,9 @@ const RefereePage = () => {
                         <div className="flex justify-between items-start mb-4">
                         <div className="flex-1">
                             <h3>
-                                {venues.find(v => v.id === match.venue_id)?.name || "Nieznany obiekt"}
+                                {venues.find(v => v.id === match.venueId)?.name || "Nieznany obiekt"}
                             </h3>
-                            <p className="text-blue-600">{match.participants_names}</p>
+                            <p className="text-blue-600">{match.participantsNames}</p>
                         </div>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium`}>
                             {match.result}
@@ -269,11 +292,11 @@ const RefereePage = () => {
                         </div>
                         <div className="flex items-center">
                             <Clock className="w-4 h-4 mr-2 text-blue-500" />
-                            {match.time_slot}
+                            {match.timeSlot}
                         </div>
                         <div className="flex items-center">
                             <MapPin className="w-4 h-4 mr-2 text-blue-500" />
-                            {venues.find(v => v.id === match.venue_id)?.location || "Nieznany obiekt"}
+                            {venues.find(v => v.id === match.venueId)?.location || "Nieznany obiekt"}
                         </div>
                         </div>
                     </div>
@@ -329,6 +352,20 @@ const RefereePage = () => {
                 </div>
                 )}
         </div>
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md text-center">
+                    <h2 className="text-xl font-semibold text-blue-900 mb-4">Informacja</h2>
+                    <p className="text-blue-800 mb-6">{modalMessage}</p>
+                    <button
+                        onClick={() => setIsModalOpen(false)}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+                    >
+                        Zamknij
+                    </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 
