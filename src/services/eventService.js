@@ -373,3 +373,21 @@ export async function getEventUpcomingMatches(eventId) {
 
   // return matches.filter(event => event.start_date > today);
 }
+
+export async function registerUser({ userData, role }) {
+  const url = `/api/${role}/register`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(userData)
+  })
+
+  if (!response.ok) {
+    const type = role == "player" ? "gracza" : role == "referee" ? "sędziego" : "użytkownika o nieznanej roli"   
+    throw new Error(`Nie udało się zarejestrować ${role}`);
+  }
+
+}
