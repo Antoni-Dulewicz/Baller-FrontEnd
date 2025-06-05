@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import CustomTable from '../components/Table/Table';
 import { getVenues, createEvent, getEvents, updateEvent, deleteEvent } from '../services/eventService';
 import AdminHeader from '../components/headers/AdminHeader';
+import HeaderAdmin from '../components/headers/HeaderAdmin';
 import { 
     Box, Button, TextField, Typography, Paper, Select, MenuItem, Collapse,
     Dialog, DialogTitle, DialogContent, DialogActions, Alert
@@ -197,7 +198,7 @@ const AddEventForm = () => {
 
     return (
         <div>        
-            <AdminHeader title="Wydarzenia" />
+            <HeaderAdmin title="Wydarzenia" />
 
             <Dialog open={editorOpen} onClose={handleClose}>
                 <DialogTitle>Dane</DialogTitle>

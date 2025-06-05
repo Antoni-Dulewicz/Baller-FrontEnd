@@ -5,6 +5,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import AdminHeader from '../components/headers/AdminHeader';
+import HeaderAdmin from '../components/headers/HeaderAdmin';
 import { getEvents } from '../services/eventService';
 
 export default function Schedule() {
@@ -58,8 +59,8 @@ export default function Schedule() {
 
   return (
     <div>
-      <AdminHeader title="Harmonogram" />
-      
+
+      <HeaderAdmin title="Harmonogram" />      
       <div className='app'>
         <Sidebar
           weekendsVisible={weekendsVisible}

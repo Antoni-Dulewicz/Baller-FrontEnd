@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Button, Box, Collapse } from '@mui/material';
 import CustomTable from '../components/Table/Table';
 import AdminHeader from '../components/headers/AdminHeader';
+import HeaderAdmin from '../components/headers/HeaderAdmin';
 import { getReferees, acceptReferee } from '../services/eventService';
+import { User } from 'lucide-react';
 
 const AcceptReferees = () => {
 
@@ -10,6 +12,7 @@ const AcceptReferees = () => {
   const [approvedReferees, setApprovedReferees] = useState([]);
   const [notApprovedReferees, setNotApprovedReferees] = useState([]);
   const [isTableOpen, setIsTableOpen] = useState(false);
+  const [isWaitingOpen, setIsWaitingOpen] = useState(false);
 
   const fetchReferees = async () => {
     try{
@@ -61,28 +64,67 @@ const AcceptReferees = () => {
     setIsTableOpen(!isTableOpen)
   }
 
+  const toggleWaiting = () => {
+    setIsWaitingOpen(!isWaitingOpen);
+  }
+
   return (
-    <div>
-      <AdminHeader title="Sedziowie" />
+
+    <div className="flex flex-col min-h-screen bg-white-900 text-black">
+      
+      {/* <header className="bg-blue-900 py-8 px-4 flex items-center justify-center relative">
+        <h1 className="text-2xl font-bold absolute left-1/2 transform -translate-x-1/2">
+        Sędziowie
+        </h1>
+        <div className="absolute right-4">
+          <button className="p-2 rounded-full hover:bg-blue-800">
+            <User size={24} />
+          </button>
+        </div>
+      </header> */}
+
+      <HeaderAdmin title="Sędziowie" />
 
       <div style={{ padding: '2rem' }}>
-        <h2>Oczekujący sędziowie</h2>
-        <CustomTable data={notApprovedReferees} columns={columnsNotAccepted} />
-        <h2>Zakceptowani sędziowie</h2>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem' }}>
-            <Button 
-                variant="contained" 
-                color="primary" 
-                onClick={toggleForm}
-            >
-                {isTableOpen ? 'Zwiń' : 'Rozwiń'}
-            </Button>
+        <h2 className="text-black text-xl font-semibold my-4">Oczekujący sędziowie</h2>
+
+        <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={toggleWaiting}
+          >
+          {isTableOpen ? 'Zwiń' : 'Rozwiń'}
+        </Button>
+
+        <Collapse in={isWaitingOpen}>
+        <CustomTable 
+          data={notApprovedReferees} 
+          columns={columnsNotAccepted} 
+          rowColor={() => '#fffbe6'} // jasny żółty dla niezaakceptowanych
+        />
+        </Collapse>
+
+        <h2 className="text-black text-xl font-semibold my-1">Zaakceptowani sędziowie</h2>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={toggleForm}
+          >
+          {isTableOpen ? 'Zwiń' : 'Rozwiń'}
+        </Button>
+
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1, mb: 1 }}>
         </Box>
+
         <Collapse in={isTableOpen}>
-          <CustomTable data={approvedReferees} columns={columnsAccepted} />
+          <CustomTable 
+            data={approvedReferees} 
+            columns={columnsAccepted} 
+            rowColor={() => '#e6fff2'} 
+          />
         </Collapse>
       </div>
-    </div>
+      </div>
   );
 };
 
