@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Calendar, Users, MapPin, Clock, Trophy, Medal, ArrowLeft, Star } from 'lucide-react';
-import { getEventsInfo } from '../services/eventService';
+import { getEventInfo, getEventUpcomingMatches } from '../services/eventService';
 
 const EventDetails = () => {
   const navigate = useNavigate();
@@ -117,8 +117,10 @@ const EventDetails = () => {
 
   const fetchData = async () => {
       try {
-        const data = await getEventsInfo(id);
+        const data = await getEventInfo(id);
+        const matches = await getEventUpcomingMatches(id);
         setEventInfo(data);
+        console.log("KURWAAAAAAAAA", matches);
       } catch (err) {
         setError("Nie udało się pobrać danych turnieju.");
         console.error(err); 
@@ -127,7 +129,7 @@ const EventDetails = () => {
   
   
 
-  if (!eventInfo.description) {
+  if (!eventInfo.name) {
   return <div>Loading event info...</div>;
 }
 
@@ -172,7 +174,7 @@ const EventDetails = () => {
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
             <div className="text-center p-3 bg-blue-50 rounded-lg">
-              <div className="text-2xl font-bold text-blue-900">{eventInfo.current_players}</div>
+              <div className="text-2xl font-bold text-blue-900">{eventInfo.participants.length}</div>
               <div className="text-sm text-blue-600">Zarejestrowani gracze</div>
             </div>
             <div className="text-center p-3 bg-blue-50 rounded-lg">
@@ -180,16 +182,16 @@ const EventDetails = () => {
               <div className="text-sm text-blue-600">Do wygrania</div>
             </div>
             <div className="text-center p-3 bg-blue-50 rounded-lg">
-              <div className="text-2xl font-bold text-blue-900">{eventInfo.courts}</div>
+              <div className="text-2xl font-bold text-blue-900">{eventInfo.venues.length}</div>
               <div className="text-sm text-blue-600">Liczba kortow</div>
             </div>
             <div className="text-center p-3 bg-blue-50 rounded-lg">
               <div className="text-2xl font-bold text-blue-900">{daysLeft}</div>
               <div className="text-sm text-blue-600">Dni do końca</div>
-            </div>
+            </div> 
           </div>
         </div>
-
+          {/* TODOOOOOOO */}
         {/* Tab Navigation */}
         <div className="flex space-x-1 bg-blue-100 p-1 rounded-lg w-fit mb-8">
           <button
@@ -236,35 +238,35 @@ const EventDetails = () => {
                     <div className="flex items-center text-blue-700">
                       <Calendar className="w-4 h-4 mr-2 text-blue-500" />
                       <span className="text-sm font-medium">Daty:</span>
-                      <span className="ml-2 text-sm">{eventInfo.dates}</span>
+                      <span className="ml-2 text-sm">{eventInfo.start_date} - {eventInfo.end_date}</span>
                     </div>
                     <div className="flex items-center text-blue-700">
                       <Users className="w-4 h-4 mr-2 text-blue-500" />
                       <span className="text-sm font-medium">Liczba graczy:</span>
-                      <span className="ml-2 text-sm">{eventInfo.current_players}/{eventInfo.max_players}</span>
+                      <span className="ml-2 text-sm">{eventInfo.participants.length}</span>
                     </div>
-                    <div className="flex items-center text-blue-700">
+                    {/* <div className="flex items-center text-blue-700">
                       <Trophy className="w-4 h-4 mr-2 text-blue-500" />
                       <span className="text-sm font-medium">Do wygrania:</span>
                       <span className="ml-2 text-sm">{eventInfo.prize}</span>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center text-blue-700">
                       <MapPin className="w-4 h-4 mr-2 text-blue-500" />
                       <span className="text-sm font-medium">Lokalizacja:</span>
-                      <span className="ml-2 text-sm">{eventInfo.location}</span>
+                      <span className="ml-2 text-sm">Kraków</span>
                     </div>
                     <div className="flex items-center text-blue-700">
                       <Medal className="w-4 h-4 mr-2 text-blue-500" />
                       <span className="text-sm font-medium">Liczba kortów:</span>
-                      <span className="ml-2 text-sm">{eventInfo.courts} Courts</span>
+                      <span className="ml-2 text-sm">{eventInfo.venues.length}</span>
                     </div>
-                    <div className="flex items-center text-blue-700">
+                    {/* <div className="flex items-center text-blue-700">
                       <Star className="w-4 h-4 mr-2 text-blue-500" />
                       <span className="text-sm font-medium">Wpisowe:</span>
                       <span className="ml-2 text-sm">{eventInfo.registration_fee}</span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
@@ -273,11 +275,11 @@ const EventDetails = () => {
               <div className="bg-white rounded-lg shadow-lg border border-blue-200 p-6">
                 <h2 className="text-xl font-semibold text-blue-900 mb-4">Opis</h2>
                 <div className="prose prose-blue max-w-none">
-                  {eventInfo.description.split('\n\n').map((paragraph, index) => (
+                  {/* {eventInfo.description.split('\n\n').map((paragraph, index) => (
                     <p key={index} className="text-blue-700 leading-relaxed mb-4">
                       {paragraph}
                     </p>
-                  ))}
+                  ))} */}
                 </div>
               </div>
             </div>

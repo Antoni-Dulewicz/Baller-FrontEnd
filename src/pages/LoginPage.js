@@ -85,7 +85,7 @@ const LoginPage = () => {
             />
             <div className="relative h-screen bg-fixed bg-center bg-cover z-10 flex justify-center items-center" style={{ backgroundImage: 'url("/login.jpg")' }}>
                 <div className='w-2/3'>
-                    <Paper sx={{ maxWidth: 600, margin: '1rem auto', borderRadius: 8}}>
+                    <Paper sx={{ maxWidth: 600, margin: '1rem auto', borderRadius: 8, overflow: 'hidden'}}>
                         
                         <Typography className="text-center text-white" mb={0} variant="h4" gutterBottom sx={{ background: "#1565c0", fontWeight: 900, padding: 3}}>
                             Logowanie
