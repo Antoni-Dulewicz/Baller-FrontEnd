@@ -19,7 +19,7 @@ const EventDetails = () => {
   }, [id]);
 
   const daysLeft = eventInfo.endDate ? Math.ceil((new Date(eventInfo.endDate) - new Date()) / (1000 * 60 * 60 * 24)) : 7;
-
+  
   const getStatusColor = (status) => {
     switch(status) {
       case 'In Progress': return 'bg-green-100 text-green-800';

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, Users, MapPin, Trophy, Medal, Clock } from 'lucide-react';
 import { Alert } from '@mui/material';
-import { getPlayerMatches, getEvents, getVenues } from '../services/eventService';
+import { getPlayerMatches, getEvents, getVenues, registerToEvent } from '../services/eventService';
 import Header from '../components/Header';
 
 const UserPage = () => {
@@ -15,6 +15,8 @@ const UserPage = () => {
     // const [eventsEnrolledTo, setEventsEnrolledTo] = useState([]);
     // const [eventsNotEnrolledTo, setEventsNotEnrolledTo] = useState([]);
     const [error, setError] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
     
 
     const navigationElements = [
@@ -68,6 +70,18 @@ const UserPage = () => {
             
         } catch (err) {
             setError('Nie udało się załadować dostępnych obiektow.');
+        }
+    };
+
+    const handleRegister = async (eventId) => {
+        try {
+            await registerToEvent(eventId, userId);
+            setModalMessage('Pomyślnie zarejestrowano na wydarzenie.');
+        } catch (err) {
+            setModalMessage('Nie udało się zarejestrować na wydarzenie.');
+        } finally {
+            setIsModalOpen(true);
+            await fetchEvents();
         }
     };
 
@@ -179,6 +193,14 @@ const UserPage = () => {
                     >
                         Zobacz szczegóły
                     </button>
+                    {event.status === 'Planning' && !event.participants.includes(userId) && (
+                        <button 
+                            className="w-full mt-2 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors"
+                            onClick={() => handleRegister(event.id)}
+                        >
+                            Zarejestruj się
+                        </button>
+                    )}
                 </div> 
                 ))}
             </div>
@@ -273,6 +295,20 @@ const UserPage = () => {
             </div>
             )}
         </div>
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md text-center">
+                    <h2 className="text-xl font-semibold text-blue-900 mb-4">Informacja</h2>
+                    <p className="text-blue-800 mb-6">{modalMessage}</p>
+                    <button
+                        onClick={() => setIsModalOpen(false)}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+                    >
+                        Zamknij
+                    </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 
