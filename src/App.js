@@ -6,6 +6,7 @@ import EventsPage from './pages/EventsPage';
 import Schedule from './pages/Schedule';
 import AdminPage from './pages/AdminPage';
 import CreateTournament from './pages/CreateTournament';
+import AdminLayout from './layouts/AdminLayout.js';
 import TournamentLadder from './pages/TournamentLadder';
 import VenuesPage from './pages/VenuesPage';
 import MatchList from './pages/MatchList';
@@ -14,6 +15,7 @@ import EventRegistration from './pages/EventRegistration.js';
 import RefereePage from './pages/RefereePage.js';
 import LoginPage from './pages/LoginPage.js';
 import RegisterPage from './pages/RegisterPage.js';
+import { UploadMatchProtocol } from './pages/UploadMatchProtocol.js';
 import EventDetails from './components/EventDetails.js'
 
 function App() {
@@ -27,15 +29,9 @@ function App() {
                 <Route path="/admin" element={<AdminPage/>} />
                 <Route path="/referee" element={<RefereePage/>} />
                 <Route path="/create-tournament" element={<CreateTournament/>} />
-                {/* <Route path="/tournament" element={<TournamentLadder
-                    name = {"Example Tournament Ladder"}
-                    place = {"Hala AGH"}
-                    date = {"09.05.2025"}
-                />} 
-                /> */}
                 <Route path="/matches/player" element={<MatchList />} />
                 <Route path="/matches/referee" element={<MatchList />} />
-                <Route path="/user" element={<UserPage/>} />
+                <Route path="/user" element={<UserPage />} />
                 <Route path="/event-registration/player" element={<EventRegistration />} />
                 <Route path="/event-registration/referee" element={<EventRegistration />} />
                 <Route path="/login" element={<LoginPage />} />
