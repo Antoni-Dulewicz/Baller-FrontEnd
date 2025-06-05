@@ -46,7 +46,9 @@ function App() {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/event/:id" element={<EventDetails />} /> */}
-                    {/* Publiczne strony */}
+                    
+
+                    {/* NEW ROUTES */}
                     <Route path="/" element={<HomePage />} />
                     <Route path="/login" element={
                         <RoutingLoginRules>

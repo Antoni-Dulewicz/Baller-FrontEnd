@@ -7,8 +7,12 @@ import {
     Box, Button, TextField, Typography, Paper, Select, MenuItem, Collapse,
     Dialog, DialogTitle, DialogContent, DialogActions, Alert
 } from '@mui/material';
+import { useAuth } from '../context/AuthContext';
 
 const AddEventForm = () => {
+    const {user} = useAuth()
+    console.log(user)
+
     const navigate = useNavigate();
     const defaultFormData = {
         name: '',

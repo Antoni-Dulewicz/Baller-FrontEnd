@@ -6,8 +6,11 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
+
+    const navigate = useNavigate()
 
     const navigationElements = []
 
@@ -26,7 +29,7 @@ const RegisterPage = () => {
     const types = ["Gracz", "Sędzia"]
     const [selectedType, setSelectedType] = useState("Gracz"); 
 
-    const [formData, setFormData] = useState({username: "", email: "", password: "", repeatPassword: ""})
+    const [formData, setFormData] = useState({firstname: "", surname: "", email: "", password: "", repeatPassword: ""})
     const handleFormChange = (event) => {
         const {name, value} = event.target
         setFormData((prevData) => ({
@@ -41,8 +44,12 @@ const RegisterPage = () => {
         event.preventDefault()
         const errors = {};
 
-        if (!formData.username) {
-            errors.username = 'Wpisz nazwę użytkownika';
+        if (!formData.firstname) {
+            errors.firstname = 'Wpisz swoje imię';
+        }
+        
+        if (!formData.surname) {
+            errors.surname = 'Wpisz swoje nazwisko';
         }
 
         if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) {
@@ -63,6 +70,44 @@ const RegisterPage = () => {
         }
 
         console.log('Dane poprawne:', { ...formData, selectedType });
+
+        const roleMap = {
+            "Gracz": "Player",
+            "Sędzia": "Referee"
+        };
+
+        const payload = {
+            email: formData.email,
+            password: formData.password,
+            first_name: formData.firstname,
+            last_name: formData.surname,
+            role: roleMap[selectedType]
+        };
+
+        fetch("http://localhost:8000/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.message || "Błąd rejestracji");
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Rejestracja udana:", data);
+            navigate("/login")
+        })
+        .catch(error => {
+            console.error("Błąd:", error.message);
+            alert("Nie udało się zarejestrować: " + error.message);
+        });
+
         setFormErrors({});
     }
     
@@ -87,13 +132,23 @@ const RegisterPage = () => {
 
                         <Box component="form" onSubmit={handleSubmit} display="flex" flexDirection="column" gap={2} marginTop={2} padding={3}>
                             <TextField
-                                label="Nazwa użytkownika"
-                                name="username"
+                                label="Imię"
+                                name="firstname"
                                 type="text"
-                                value={formData.username}
+                                value={formData.firstname}
                                 onChange={handleFormChange}
-                                error={!!formErrors.username}
-                                helperText={formErrors.username}
+                                error={!!formErrors.firstname}
+                                helperText={formErrors.firstname}
+                            />
+
+                            <TextField
+                                label="Nazwisko"
+                                name="surname"
+                                type="text"
+                                value={formData.surname}
+                                onChange={handleFormChange}
+                                error={!!formErrors.surname}
+                                helperText={formErrors.surname}
                             />
 
                             <TextField
@@ -171,8 +226,8 @@ const RegisterPage = () => {
                                     </Typography>
                                 )}
                             </FormControl>
-                            <Box display="flex" justifyContent="center" marginTop={3}>
-                                <Button type="submit" variant="contained" color="primary" onClick={handleSubmit} sx={{ width: 200,fontSize: 16, fontWeight: 600}}>
+                            <Box display="flex" justifyContent="center" marginTop={3} onSubmit={handleSubmit}>
+                                <Button type="submit" variant="contained" color="primary" sx={{ width: 200,fontSize: 16, fontWeight: 600}}>
                                     Zarejestruj
                                 </Button>
                             </Box>
