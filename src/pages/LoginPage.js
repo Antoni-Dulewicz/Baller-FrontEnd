@@ -6,8 +6,14 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {users as mockUsers} from "./../mocks/mockUsers.js"
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext.js';
 
 const LoginPage = () => {
+
+
+    const { login, user } = useAuth();
+    console.log(user)
+
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -49,12 +55,15 @@ const LoginPage = () => {
 
         if (foundUser) {
             if (foundUser.role === "Gracz") {
+                login({name: "Marcin", role: "player"})
                 navigate("/user")
             }
             else if (foundUser.role === "Sędzia") {
+                login({name: "Marcin", role: "referee"})
                 navigate("/referee")
             }
             else if (foundUser.role === "Administrator") {
+                login({name: "Marcin", role: "admin"})
                 navigate("/admin")
             }
         } 

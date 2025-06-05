@@ -1,15 +1,17 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-const RoutingGuard = ({ children, allowedRoles }) => {
+const RoutingPersonalRules = ({ children, allowedRoles }) => {
  
     const { user } = useAuth();
 
+    console.log(user)
+
     if (!user || !allowedRoles.includes(user.role)) {
-        return <Navigate to="/" replace/>;
+        return <Navigate to="/login" replace/>;
     }
 
     return children;
 }
 
-export default RoutingGuard;
+export default RoutingPersonalRules;

@@ -1,8 +1,14 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Header = ({ navigationElements, userState }) => {
 
+
+    const { user, logout } = useAuth();
     const navigate = useNavigate();
+
+    console.log(user)
+
 
     const handleClickButton = (path) => {
         navigate(path);
@@ -23,8 +29,11 @@ const Header = ({ navigationElements, userState }) => {
                     {/* TRZA DODAĆ IFA Z WYLOGUJ LUB ZALOGUJ */}
                     {/* <button className="p-2 text-blue-300 hover:text-white">CO
                     </button> */}
-                    {userState ? <button className="text-blue-200 hover:text-white">Wyloguj</button> 
-                    : <button className="text-blue-200 hover:text-white">Zaloguj się</button>}
+                    {user ? <button className="text-blue-200 hover:text-white" onClick={() => {
+                        navigate("/login");
+                        logout();
+                    }}>Wyloguj</button> 
+                    : <button className="text-blue-200 hover:text-white" onClick={() => {navigate("/login");}}>Zaloguj się</button>}
                     
                 </div>
             </div>

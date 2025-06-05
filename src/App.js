@@ -16,12 +16,12 @@ import LoginPage from './pages/LoginPage.js';
 import RegisterPage from './pages/RegisterPage.js';
 import EventDetails from './components/EventDetails.js'
 import HomePage from './pages/HomePage.js';
-import RoutingGuard from './components/RoutingGuard.js';
+import RoutingPersonalRules from './components/RoutingPersonalRules.js';
 import { AuthProvider } from './context/AuthContext.js';
+import RoutingLoginRules from './components/RoutingLoginRules.js';
 
 function App() {
     return (
-        <AuthProvider>
             <Router>
                 <Routes>
                     {/* <Route path="/" element={<HomePage />} />
@@ -48,69 +48,74 @@ function App() {
                     <Route path="/event/:id" element={<EventDetails />} /> */}
                     {/* Publiczne strony */}
                     <Route path="/" element={<HomePage />} />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/login" element={
+                        <RoutingLoginRules>
+                            <LoginPage />
+                        </RoutingLoginRules>
+                    } />
+                    <Route path="/register" element={
+                        <RoutingLoginRules>
+                            <RegisterPage />
+                        </RoutingLoginRules>
+                    } />
                     <Route path="/events" element={<EventsPage />} />
                     <Route path="/venues" element={<VenuesPage />} />
                     <Route path="/event/:id" element={<EventDetails />} />
 
                     <Route path="/user" element={
-                        <RoutingGuard allowedRoles={['player']}>
-                            <MatchList />
-                        </RoutingGuard>
+                        <RoutingPersonalRules allowedRoles={['player']}>
+                            <UserPage />
+                        </RoutingPersonalRules>
                     } />
                     <Route path="/event-registration/player" element={
-                        <RoutingGuard allowedRoles={['player']}>
+                        <RoutingPersonalRules allowedRoles={['player']}>
                             <EventRegistration />
-                        </RoutingGuard>
+                        </RoutingPersonalRules>
                     } />
 
-                    {/* Sędzia */}
                     <Route path="/referee" element={
-                        <RoutingGuard allowedRoles={['referee']}>
+                        <RoutingPersonalRules allowedRoles={['referee']}>
                             <RefereePage />
-                        </RoutingGuard>
+                        </RoutingPersonalRules>
                     } />
                     <Route path="/matches/referee" element={
-                        <RoutingGuard allowedRoles={['referee']}>
+                        <RoutingPersonalRules allowedRoles={['referee']}>
                             <MatchList />
-                        </RoutingGuard>
+                        </RoutingPersonalRules>
                     } />
                     <Route path="/event-registration/referee" element={
-                        <RoutingGuard allowedRoles={['referee']}>
+                        <RoutingPersonalRules allowedRoles={['referee']}>
                             <EventRegistration />
-                        </RoutingGuard>
+                        </RoutingPersonalRules>
                     } />
 
-                    {/* Admin */}
                     <Route path="/admin" element={
-                        <RoutingGuard allowedRoles={['admin']}>
+                        <RoutingPersonalRules allowedRoles={['admin']}>
                             <AdminPage />
-                        </RoutingGuard>
+                        </RoutingPersonalRules>
                     } />
                     <Route path="/referees" element={
-                        <RoutingGuard allowedRoles={['admin']}>
+                        <RoutingPersonalRules allowedRoles={['admin']}>
                             <AcceptReferees />
-                        </RoutingGuard>
+                        </RoutingPersonalRules>
                     } />
                     <Route path="/create-tournament" element={
-                        <RoutingGuard allowedRoles={['admin']}>
+                        <RoutingPersonalRules allowedRoles={['admin']}>
                             <CreateTournament />
-                        </RoutingGuard>
+                        </RoutingPersonalRules>
                     } />
                     <Route path="/schedule" element={
-                        <RoutingGuard allowedRoles={['admin']}>
+                        <RoutingPersonalRules allowedRoles={['admin']}>
                             <Schedule />
-                        </RoutingGuard>
+                        </RoutingPersonalRules>
                     } />
                     <Route path="/venues" element={
-                        <RoutingGuard allowedRoles={['admin']}>
+                        <RoutingPersonalRules allowedRoles={['admin']}>
                             <Schedule />
-                        </RoutingGuard>
+                        </RoutingPersonalRules>
                     } />
                 </Routes>
             </Router>
-        </AuthProvider>
     );
 }
 
