@@ -1,24 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User } from 'lucide-react';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 const AdminPage = () => {
     const navigate = useNavigate();
 
     const handleButtonClick = (path) => {
-        navigate(path);
+        navigate("/admin" + path);
     };
 
   return (
-    <div className="flex flex-col min-h-screen bg-white-900 text-white">
-      {/* Header with user icon */}
-      <header className="bg-blue-900 p-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold pl-8">Tryb administratora</h1>
-        <button className="p-2 rounded-full hover:bg-blue-800">
-          <User size={24} />
-        </button>
-      </header>
-
       <div className="flex flex-wrap justify-center gap-4 px-8 pt-16">
         <button 
           onClick={() => handleButtonClick('/algorithm')}
@@ -42,6 +33,16 @@ const AdminPage = () => {
             </svg>
           </div>
           <span>Pokaż Harmonogram</span>
+        </button>
+
+        <button 
+          onClick={() => handleButtonClick('/protocol')}
+          className="bg-blue-500 hover:bg-blue-600 p-4 rounded w-48 h-24 text-center flex flex-col items-center justify-center"
+        >
+          <div className="mb-2">
+            <UploadFileIcon />
+          </div>
+          <span>Wypełnij protokół</span>
         </button>
 
         <button 
@@ -80,7 +81,6 @@ const AdminPage = () => {
           <span>Zarządzaj obiektami</span>
         </button>
       </div>
-    </div>
   );
         
 }

@@ -6,6 +6,7 @@ import EventsPage from './pages/EventsPage';
 import Schedule from './pages/Schedule';
 import AdminPage from './pages/AdminPage';
 import CreateTournament from './pages/CreateTournament';
+import AdminLayout from './layouts/AdminLayout.js';
 import TournamentLadder from './pages/TournamentLadder';
 import VenuesPage from './pages/VenuesPage';
 import MatchList from './pages/MatchList';
@@ -14,6 +15,7 @@ import EventRegistration from './pages/EventRegistration.js';
 import RefereePage from './pages/RefereePage.js';
 import LoginPage from './pages/LoginPage.js';
 import RegisterPage from './pages/RegisterPage.js';
+import { UploadMatchProtocol } from './pages/UploadMatchProtocol.js';
 import EventDetails from './components/EventDetails.js'
 import HomePage from './pages/HomePage.js';
 import RoutingPersonalRules from './components/RoutingPersonalRules.js';
