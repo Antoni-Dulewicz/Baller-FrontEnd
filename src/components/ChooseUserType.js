@@ -17,12 +17,12 @@ const ChooseUserType = ({types, selectedType, setSelectedType}) => {
                     p: 2,
                     cursor: 'pointer',
                     userSelect: 'none',
-                    bgcolor: selectedType === type ? '#2074d4' : '#5391DA',
+                    bgcolor: selectedType === type ? '#1565c0' : '#2074d4',
                     color: selectedType === type ? '#fff' : '#eee',
                     transition: 'background-color 0.6s',
                     '&:hover': {
-                        bgcolor: selectedType === type ? '#1565c0' : '#e0e0e0',
-                        color: selectedType === type ? '#eee' : '#444' 
+                        bgcolor: selectedType === type ? '#1565c0' : '#1265c0',
+                        color: selectedType === type ? '#eee' : '#ddd' 
                     }
                 }}
             >

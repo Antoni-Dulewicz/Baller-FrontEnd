@@ -1,94 +1,44 @@
-import { User, Menu, X } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
-const Header = ({ title }) => {
-  const navigate = useNavigate();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+const Header = ({ navigationElements, userState }) => {
 
-  const handleButtonClick = (path) => {
-    navigate(path);
-    setIsMenuOpen(false);
-  };
 
-  const navItems = [
-    { path: '/admin', label: 'Strona główna' },
-    { path: '/algorithm', label: 'Uruchom scheduling' },
-    { path: '/schedule', label: 'Pokaż Harmonogram'},
-    { path: '/events', label: 'Zarządzaj wydarzeniami' },
-    { path: '/referees', label: 'Zarządzaj sędziami' },
-    { path: '/venues', label: 'Zarządzaj obiektami' },
-  ];
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
 
-  return (
-    <header className="p-4 bg-white shadow-sm">
-      {/* Top bar with title, menu toggle and user icon */}
-      <div className="w-full flex justify-between items-center">
-        <h1 className="text-xl md:text-2xl font-bold">{title}</h1>
-        
-        <div className="flex items-center gap-2">          
-          {/* Mobile menu toggle */}
-          <button 
-            className="p-2 rounded-full hover:bg-gray-100 lg:hidden" 
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+    console.log(user)
 
-          {/* User icon - always visible */}
-          <button className="p-2 rounded-full hover:bg-gray-100">
-            <User size={24} />
-          </button>
-        </div>
-      </div>
 
-      {/* Navigation - three different layouts based on screen size */}
-      <nav className={`
-        ${isMenuOpen ? 'flex' : 'hidden'} 
-        lg:flex flex-col md:flex-row flex-wrap
-        w-full mt-4 gap-2
-      `}>
-        <div className="w-full lg:hidden grid grid-cols-2 gap-2">
-          {navItems.map((item) => (
-            <button
-              key={item.path}
-              onClick={() => handleButtonClick(item.path)}
-              className={`
-                py-2 px-2 text-sm md:text-base rounded text-center
-                transition-colors duration-200
-                ${item.isActive 
-                  ? 'bg-blue-600 text-white hover:bg-blue-700' 
-                  : 'bg-blue-500 text-white hover:bg-blue-600'
-                }
-              `}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
+    const handleClickButton = (path) => {
+        navigate(path);
+    }
 
-        {/* Desktop navigation - horizontal row */}
-        <div className="hidden lg:flex flex-row gap-3 justify-center">
-          {navItems.map((item) => (
-            <button
-              key={item.path}
-              onClick={() => handleButtonClick(item.path)}
-              className={`
-                py-2 px-4 text-base rounded text-center
-                transition-colors duration-200
-                ${item.isActive 
-                  ? 'bg-blue-600 text-white hover:bg-blue-700' 
-                  : 'bg-blue-500 text-white hover:bg-blue-600'
-                }
-              `}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-      </nav>
-    </header>
-  );
-};
+    return (
+        <header className="bg-blue-900 border-b border-blue-800 px-6 py-4 sticky top-0 z-20">
+            <div className="max-w-7xl mx-auto flex items-center justify-between">
+                <div className="flex items-center space-x-8">
+                    <h1 onClick={() => handleClickButton("/")} className="cursor-pointer display-block text-xl font-semibold text-white">BallerIO</h1>
+                    <nav className="flex space-x-6">
+                        {navigationElements.map((element, index) => {
+                            return <span key={index} className="text-blue-200">{element}</span>
+                        })}
+                    </nav>
+                </div>
+                <div className="flex items-center space-x-4">
+                    {/* TRZA DODAĆ IFA Z WYLOGUJ LUB ZALOGUJ */}
+                    {/* <button className="p-2 text-blue-300 hover:text-white">CO
+                    </button> */}
+                    {user ? <button className="text-blue-200 hover:text-white" onClick={() => {
+                        navigate("/login");
+                        logout();
+                    }}>Wyloguj</button> 
+                    : <button className="text-blue-200 hover:text-white" onClick={() => {navigate("/login");}}>Zaloguj się</button>}
+                    
+                </div>
+            </div>
+        </header>
+    )    
+}
 
 export default Header;

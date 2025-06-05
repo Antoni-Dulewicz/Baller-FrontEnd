@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getPlayerMatches, getRefereeMatches, getVenue } from '../services/eventService';
-import UserHeader from '../components/UserHeader';
-import RefereeHeader from '../components/RefereeHeader';
+import UserHeader from '../components/headers/UserHeader';
+import RefereeHeader from '../components/headers/RefereeHeader';
 
 const playerId = 4;
 const refereeId = 7;

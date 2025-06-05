@@ -3,8 +3,8 @@ import { useLocation } from 'react-router-dom';
 import { getUpcomingEvents, registerToEvent, registerRefereeToEvent } from '../services/eventService';
 import { AlertCircle, CalendarCheck } from 'lucide-react';
 import { Box, Button,Collapse } from '@mui/material';
-import UserHeader from '../components/UserHeader';
-import RefereeHeader from '../components/RefereeHeader';
+import UserHeader from '../components/headers/UserHeader';
+import RefereeHeader from '../components/headers/RefereeHeader';
 
 const userId = 4;
 const refereeId = 7;
