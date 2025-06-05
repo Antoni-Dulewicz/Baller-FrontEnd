@@ -4,7 +4,7 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import Header from '../components/Header';
+import HeaderAdmin from '../components/headers/HeaderAdmin'
 import { getEvents } from '../services/eventService';
 
 export default function Schedule() {
@@ -58,7 +58,7 @@ export default function Schedule() {
 
   return (
     <div>
-      <Header title="Harmonogram" />
+      <HeaderAdmin title="Harmonogram" />
       
       <div className='app'>
         <Sidebar

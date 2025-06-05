@@ -2,7 +2,7 @@ import { User, Menu, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-const Header = ({ title }) => {
+const UserHeader = ({ title }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -12,26 +12,16 @@ const Header = ({ title }) => {
   };
 
   const navItems = [
-    { path: '/admin', label: 'Strona główna' },
-    { path: '/algorithm', label: 'Uruchom scheduling' },
-    { path: '/schedule', label: 'Pokaż Harmonogram'},
-    { path: '/events', label: 'Zarządzaj wydarzeniami' },
-    { path: '/referees', label: 'Zarządzaj sędziami' },
-    { path: '/venues', label: 'Zarządzaj obiektami' },
+    { path: '/user', label: 'Strona główna' },
+    { path: '/matches/player', label: 'Lista Meczy' },
+    { path: '/event-registration/player', label: 'Rejestracja'}
   ];
 
   return (
-    <header className="p-4 bg-white shadow-sm">
+    <header className="p-4 bg-blue-900 shadow-sm">
       {/* Top bar with title, menu toggle and user icon */}
-       <div className="bg-blue-900 py-8 px-4 flex items-center justify-center relative">
-        <h1 className="text-2xl text-white font-bold absolute left-1/2 transform -translate-x-1/2">
-        {title}
-        </h1>
-        <div className="absolute right-4">
-          <button className="p-2 rounded-full hover:bg-blue-800">
-            <User size={24} color="white" />
-          </button>
-        </div>
+      <div className="w-full flex justify-between items-center">
+        <h1 className="text-xl md:text-2xl font-bold text-white">{title}</h1>
         
         <div className="flex items-center gap-2">          
           {/* Mobile menu toggle */}
@@ -40,7 +30,12 @@ const Header = ({ title }) => {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>   
+          </button>
+
+          {/* User icon - always visible */}
+          <button className="p-2 rounded-full hover:bg-gray-100">
+            <User size={24} />
+          </button>
         </div>
       </div>
 
@@ -93,4 +88,4 @@ const Header = ({ title }) => {
   );
 };
 
-export default Header;
+export default UserHeader;

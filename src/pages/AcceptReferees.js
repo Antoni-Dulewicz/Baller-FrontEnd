@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Box, Collapse } from '@mui/material';
 import CustomTable from '../components/Table/Table';
-import Header from '../components/Header';
+import HeaderAdmin from '../components/headers/HeaderAdmin';
 import { getReferees, acceptReferee } from '../services/eventService';
 import { User } from 'lucide-react';
 
@@ -81,7 +81,7 @@ const AcceptReferees = () => {
         </div>
       </header> */}
 
-      <Header title="Sędziowie" />
+      <HeaderAdmin title="Sędziowie" />
 
       <div style={{ padding: '2rem' }}>
         <h2 className="text-black text-xl font-semibold my-4">Oczekujący sędziowie</h2>

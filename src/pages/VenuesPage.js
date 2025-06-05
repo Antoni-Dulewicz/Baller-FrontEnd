@@ -1,4 +1,4 @@
-import Header from '../components/Header';
+import HeaderAdmin from '../components/headers/HeaderAdmin';
 import React, { useEffect, useState } from 'react';
 import { 
     Box, Button, TextField, Typography, Paper, Select,
@@ -69,7 +69,7 @@ const VenuesPage = () => {
 
     return (
         <div>
-            <Header title="Obiekty" />
+            <HeaderAdmin title="Obiekty" />
 
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem' }}>
                 <Button 
