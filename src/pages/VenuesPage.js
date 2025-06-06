@@ -1,4 +1,3 @@
-import Header from '../components/headers/AdminHeader';
 import HeaderAdmin from '../components/headers/HeaderAdmin';
 import React, { useEffect, useState } from 'react';
 import { 
@@ -8,6 +7,8 @@ import {
 import { createVenue, getVenues } from '../services/eventService';
 import CardMedia from '@mui/material/CardMedia';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import Header from '../components/Header';
+import CopyrightFooter from '../components/CopyrightFooter';
 
 const VenuesPage = () => {
 
@@ -69,7 +70,9 @@ const VenuesPage = () => {
     };
 
     return (
-        <div>
+        <>
+        <div className='min-h-screen'>
+            <Header navigationElements={[]}/>
             <HeaderAdmin title="Obiekty" />
 
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem' }}>
@@ -202,6 +205,8 @@ const VenuesPage = () => {
                 </Grid>
             </Paper>
         </div>
+        <CopyrightFooter />
+    </>
     );
 
 };

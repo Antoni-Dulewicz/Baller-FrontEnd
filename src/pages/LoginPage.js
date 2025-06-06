@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.js';
 import Header from '../components/Header.js';
 import Footer from '../components/Footer.js';
+import { loginUser } from '../services/eventService.js';
 
 const LoginPage = () => {
 
@@ -49,36 +50,72 @@ const LoginPage = () => {
 
     const navigate = useNavigate();
 
-    const handleSubmit = (event) => {
-        event.preventDefault()
+    // const handleSubmit = (event) => {
+    //     event.preventDefault()
         
-        const foundUser = mockUsers.find(
-            u => 
-                u.email === formData.email &&
-                u.password === formData.password &&
-                u.role === selectedType 
-        )
+    //     const foundUser = mockUsers.find(
+    //         u => 
+    //             u.email === formData.email &&
+    //             u.password === formData.password &&
+    //             u.role === selectedType 
+    //     )
 
-        if (foundUser) {
-            console.log(foundUser)
-            if (foundUser.role === "Gracz") {
-                login({name: "Marcin", role: "player"})
-                navigate("/user")
-            }
-            else if (foundUser.role === "Sędzia") {
-                login({name: "Marcin", role: "referee"})
-                navigate("/referee")
-            }
-            else if (foundUser.role === "Administrator") {
-                login({name: "Marcin", role: "admin"})
-                navigate("/admin")
-            }
-        } 
-        else {
-            setFormErrors({ email: "Nieprawidłowe dane logowania", password: "" });
-        }
-    }
+    //     if (foundUser) {
+    //         console.log(foundUser)
+    //         if (foundUser.role === "Gracz") {
+    //             login({name: "Marcin", role: "player"})
+    //             navigate("/user")
+    //         }
+    //         else if (foundUser.role === "Sędzia") {
+    //             login({name: "Marcin", role: "referee"})
+    //             navigate("/referee")
+    //         }
+    //         else if (foundUser.role === "Administrator") {
+    //             login({name: "Marcin", role: "admin"})
+    //             navigate("/admin")
+    //         }
+    //     } 
+    //     else {
+    //         setFormErrors({ email: "Nieprawidłowe dane logowania", password: "" });
+    //     }
+    // }
     
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        setFormErrors({});
+
+        try {
+            const roleMap = {
+                "Gracz": "player",
+                "Sędzia": "referee",
+                "Administrator": "admin"
+            };
+
+            const role = roleMap[selectedType];
+
+            if (role != "admin") { 
+
+                const userId = await loginUser(formData, role);
+
+                login( userId, role);
+
+                if (role === "player") {
+                    navigate("/user");
+                }
+                else if (role === "referee") {
+                    navigate("/referee");
+                }
+            }
+            else {
+                login("Admin", "admin");
+                navigate("/admin");
+            }
+        } catch (error) {
+            setFormErrors({ email: error.message, password: "" });
+        }
+    };
+
     return (
         <div className="min-h-screen bg-blue-50">
             <Header 
