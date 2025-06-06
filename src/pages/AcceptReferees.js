@@ -4,7 +4,9 @@ import CustomTable from '../components/Table/Table';
 import AdminHeader from '../components/headers/AdminHeader';
 import HeaderAdmin from '../components/headers/HeaderAdmin';
 import { getReferees, acceptReferee } from '../services/eventService';
-import { User } from 'lucide-react';
+import { Copyright, User } from 'lucide-react';
+import Header from '../components/Header';
+import CopyrightFooter from '../components/CopyrightFooter';
 
 const AcceptReferees = () => {
 
@@ -69,7 +71,7 @@ const AcceptReferees = () => {
   }
 
   return (
-
+    <>
     <div className="flex flex-col min-h-screen bg-white-900 text-black">
       
       {/* <header className="bg-blue-900 py-8 px-4 flex items-center justify-center relative">
@@ -82,7 +84,10 @@ const AcceptReferees = () => {
           </button>
         </div>
       </header> */}
-
+      <Header
+          navigationElements={[]}
+          userState={null}
+      />
       <HeaderAdmin title="Sędziowie" />
 
       <div style={{ padding: '2rem' }}>
@@ -125,6 +130,8 @@ const AcceptReferees = () => {
         </Collapse>
       </div>
       </div>
+      <CopyrightFooter />
+    </>
   );
 };
 

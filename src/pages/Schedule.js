@@ -7,6 +7,8 @@ import interactionPlugin from '@fullcalendar/interaction'
 import AdminHeader from '../components/headers/AdminHeader';
 import HeaderAdmin from '../components/headers/HeaderAdmin';
 import { getEvents } from '../services/eventService';
+import Header from '../components/Header'
+import CopyrightFooter from '../components/CopyrightFooter'
 
 export default function Schedule() {
 
@@ -58,8 +60,12 @@ export default function Schedule() {
 
 
   return (
-    <div>
-
+    <>
+    <div className='min-h-screen'>
+      <Header
+            navigationElements={[]}
+            userState={null}
+        />
       <HeaderAdmin title="Harmonogram" />      
       <div className='app'>
         <Sidebar
@@ -95,6 +101,8 @@ export default function Schedule() {
         </div>
       </div>
     </div>
+      <CopyrightFooter />
+    </>
   )
 }
 
