@@ -351,6 +351,7 @@ export async function getUpcomingEvents() {
   const today = new Date().toISOString().split('T')[0];
 
   return events.filter(event => event.start_date > today);
+
 }
 
 export async function getEventUpcomingMatches(eventId) {
@@ -440,6 +441,49 @@ export async function registerUser( userData, role ) {
     throw new Error(`Nie udało się zarejestrować`);
   }
 }
+
+export async function getEventTree(eventID) {
+  const url = `${API_URL}/api/tree/${eventID}`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Accept": "application/json"
+    }
+  });
+  const eventTree = await response.json();
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch event tree ladderr.");
+  }
+
+  return {
+    rootMatchId: eventTree.root_match_id,
+    matchesMap: new Map(Object.entries(eventTree.matches).map(([k, v]) => [parseInt(k), v]))
+  };
+}
+
+export async function getMatchParticipants (matchID) {
+  const url = `${API_URL}/api/MatchDetails/${matchID}`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Accept": "application/json"
+    }
+  });
+
+  const People = await response.json();
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch event tree ladderr.");
+  }
+
+  console.log("Uczestnicy: ", People.participants)
+
+  return {
+    participants: People.participants,
+    referees: People.referees
+  };
+
 
 export async function loginUser( userData, role ) {
   const url = `${API_URL}/api/${role}/login`;
