@@ -374,8 +374,9 @@ export async function getEventUpcomingMatches(eventId) {
   // return matches.filter(event => event.start_date > today);
 }
 
-export async function registerUser({ userData, role }) {
-  const url = `/api/${role}/register`;
+export async function registerUser( userData, role ) {
+  const url = `${API_URL}/api/${role}/register`;
+  console.log(url)
 
   const response = await fetch(url, {
     method: "POST",
@@ -385,9 +386,11 @@ export async function registerUser({ userData, role }) {
     body: JSON.stringify(userData)
   })
 
+  console.log(response)
+
   if (!response.ok) {
     const type = role == "player" ? "gracza" : role == "referee" ? "sędziego" : "użytkownika o nieznanej roli"   
-    throw new Error(`Nie udało się zarejestrować ${role}`);
+    throw new Error(`Nie udało się zarejestrować ${role}: ${response.message}`);
   }
 
 }

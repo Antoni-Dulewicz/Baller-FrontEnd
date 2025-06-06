@@ -41,7 +41,7 @@ const RegisterPage = () => {
 
     const [formErrors, setFormErrors] = useState({})
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
         const errors = {};
 
@@ -81,51 +81,14 @@ const RegisterPage = () => {
             }
             const role = selectedType == "Gracz" ? "player" : selectedType == "Sędzia" ? "referee" : null;
 
-            registerUser( registerData, role);
+            await registerUser( registerData, role );
             navigate("/login");
         }
         catch (err) {
             console.log("Rejestracja nie powiodła się " + err);
             alert("Rejestracja nie powiodła się");
         }
-
-        // const roleMap = {
-        //     "Gracz": "Player",
-        //     "Sędzia": "Referee"
-        // };
-
-        // const payload = {
-        //     email: formData.email,
-        //     password: formData.password,
-        //     first_name: formData.firstname,
-        //     last_name: formData.surname,
-        //     role: roleMap[selectedType]
-        // };
-
-        // fetch("http://localhost:8000/register", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     body: JSON.stringify(payload)
-        // })
-        // .then(response => {
-        //     if (!response.ok) {
-        //         return response.json().then(data => {
-        //             throw new Error(data.message || "Błąd rejestracji");
-        //         });
-        //     }
-        //     return response.json();
-        // })
-        // .then(data => {
-        //     console.log("Rejestracja udana:", data);
-        //     navigate("/login")
-        // })
-        // .catch(error => {
-        //     console.error("Błąd:", error.message);
-        //     alert("Nie udało się zarejestrować: " + error.message);
-        // });
-
+        
         setFormErrors({});
     }
     
@@ -212,7 +175,7 @@ const RegisterPage = () => {
                                 )}
                             </FormControl>
                             
-                            <FormControl variant="outlined" error={!!formErrors.confirmPassword}>
+                            <FormControl variant="outlined" error={!!formErrors.repeatPassword}>
                                 <InputLabel htmlFor="outlined-adornment-confirm-password">Powtórz hasło</InputLabel>
                                 <OutlinedInput
                                     name="repeatPassword"
