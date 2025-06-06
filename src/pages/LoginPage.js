@@ -60,6 +60,7 @@ const LoginPage = () => {
         )
 
         if (foundUser) {
+            console.log(foundUser)
             if (foundUser.role === "Gracz") {
                 login({name: "Marcin", role: "player"})
                 navigate("/user")
