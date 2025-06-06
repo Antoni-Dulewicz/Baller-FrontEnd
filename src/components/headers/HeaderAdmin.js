@@ -21,16 +21,16 @@ const HeaderAdmin = ({ title }) => {
   ];
 
   return (
-    <header className="p-4 bg-white shadow-sm">
+    <header className=" bg-white shadow-sm">
       {/* Top bar with title, menu toggle and user icon */}
        <div className="bg-blue-900 py-8 px-4 flex items-center justify-center relative">
         <h1 className="text-2xl text-white font-bold absolute left-1/2 transform -translate-x-1/2">
         {title}
         </h1>
         <div className="absolute right-4">
-          <button className="p-2 rounded-full hover:bg-blue-800">
+          {/* <button className="p-2 rounded-full hover:bg-blue-800">
             <User size={24} color="white" />
-          </button>
+          </button> */}
         </div>
         
         <div className="flex items-center gap-2">          

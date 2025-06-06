@@ -9,6 +9,8 @@ import {
     Dialog, DialogTitle, DialogContent, DialogActions, Alert
 } from '@mui/material';
 import { useAuth } from '../context/AuthContext';
+import Header from '../components/Header';
+import CopyrightFooter from '../components/CopyrightFooter';
 
 const AddEventForm = () => {
     const {user} = useAuth()
@@ -197,7 +199,12 @@ const AddEventForm = () => {
     ];
 
     return (
-        <div>        
+        <>
+        <div className='min-h-screen'>        
+            <Header
+                navigationElements={[]}
+                userState={null}
+            />
             <HeaderAdmin title="Wydarzenia" />
 
             <Dialog open={editorOpen} onClose={handleClose}>
@@ -318,7 +325,10 @@ const AddEventForm = () => {
             </Collapse>
 
             <CustomTable data={events} columns={columns} />
+
         </div>
+        <CopyrightFooter />
+        </>
     );
 };
 
