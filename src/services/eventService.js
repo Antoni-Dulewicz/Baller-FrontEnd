@@ -368,9 +368,56 @@ export async function getEventUpcomingMatches(eventId) {
   }
   
   const matches = await response.json();
-  return matches
-  // const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split('T')[0];
 
+  return matches.filter(match => match.day > today);
+}
+
+export async function getEventCompletedMatches(eventId) {
+  const url = `${API_URL}/api/matches/${eventId}`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Accept": "application/json"
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Nie udało się pobrać listy turniejów");
+  }
+  
+  const matches = await response.json();
+  const today = new Date().toISOString().split('T')[0];
+
+  console.log("Match match: ", matches)
+  console.log("Today: ", today)
+
+  return matches.filter(match => {
+    const matchDate = new Date(match.day).toISOString().split('T')[0];
+    return matchDate < today;
+});
+
+}
+
+export async function getEventTodayMatches(eventId) {
+  const url = `${API_URL}/api/matches/${eventId}`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Accept": "application/json"
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Nie udało się pobrać listy turniejów");
+  }
+  
+  const matches = await response.json();
+  const today = new Date().toISOString().split('T')[0];
+
+  return matches.filter(match => match.day === today);
   // return matches.filter(event => event.start_date > today);
 }
 
@@ -392,5 +439,4 @@ export async function registerUser( userData, role ) {
     const type = role == "player" ? "gracza" : role == "referee" ? "sędziego" : "użytkownika o nieznanej roli"   
     throw new Error(`Nie udało się zarejestrować ${role}: ${response.message}`);
   }
-
 }

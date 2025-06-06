@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Calendar, Users, MapPin, Clock, Trophy, Medal, ArrowLeft, Star } from 'lucide-react';
-import { getEventInfo, getEventUpcomingMatches } from '../services/eventService';
+import { getEventInfo, getEventUpcomingMatches, getParticipants, getEventCompletedMatches, getEventTodayMatches} from '../services/eventService';
 
 const EventDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState('overview');
   const [eventInfo, setEventInfo] = useState({});
+  const [completedMatches, setCompletedMatches] = useState([]);
+  const [todaysMatches, setTodaysMatches] = useState([]);
+  const [participants, setParticipants] = useState([]);
+  const [venues, setVenues] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -15,84 +19,7 @@ const EventDetails = () => {
   }, [id]);
 
   const daysLeft = eventInfo.endDate ? Math.ceil((new Date(eventInfo.endDate) - new Date()) / (1000 * 60 * 60 * 24)) : 7;
-
-  const completedMatches = [
-    {
-      id: 1,
-      player1: "John Smith",
-      player2: "Mike Johnson",
-      score: "6-4, 6-3",
-      winner: "John Smith",
-      date: "2025-04-12",
-      time: "14:00",
-      round: "1/4 finału",
-      court: "Kort 1"
-    },
-    {
-      id: 2,
-      player1: "Sarah Williams",
-      player2: "Emma Davis",
-      score: "6-2, 4-6, 6-4",
-      winner: "Sarah Williams", 
-      date: "2025-04-12",
-      time: "15:30",
-      round: "1/4 finału",
-      court: "Kort 2"
-    },
-    {
-      id: 3,
-      player1: "David Lee",
-      player2: "Tom Wilson",
-      score: "6-1, 6-2",
-      winner: "David Lee",
-      date: "2025-04-11",
-      time: "16:00",
-      round: "1/8 finału",
-      court: "Kort 3"
-    },
-    {
-      id: 4,
-      player1: "Anna Miller",
-      player2: "Lisa Brown",
-      score: "4-6, 6-3, 6-2",
-      winner: "Anna Miller",
-      date: "2025-04-11",
-      time: "10:30",
-      round: "1/8 finału", 
-      court: "Kort 4"
-    }
-  ];
-
-  const todaysMatches = [
-    {
-      id: 1,
-      player1: "John Smith",
-      player2: "Sarah Williams",
-      time: "14:00",
-      round: "Półfinał",
-      court: "Kort 1",
-      referee: "Michael Johnson"
-    },
-    {
-      id: 2,
-      player1: "David Lee", 
-      player2: "Anna Miller",
-      time: "16:00",
-      round: "Półfinał",
-      court: "Kort 2",
-      referee: "Robert Brown"
-    },
-    {
-      id: 3,
-      player1: "Chris Taylor",
-      player2: "Mark Anderson",
-      time: "10:00",
-      round: "1/4 finału",
-      court: "Kort 3",
-      referee: "Jennifer White"
-    }
-  ];
-
+  
   const getStatusColor = (status) => {
     switch(status) {
       case 'In Progress': return 'bg-green-100 text-green-800';
@@ -119,8 +46,16 @@ const EventDetails = () => {
       try {
         const data = await getEventInfo(id);
         const matches = await getEventUpcomingMatches(id);
+        const participants = await getParticipants(data.participants);
+        const completedMatches = await getEventCompletedMatches(id)
+        const todayMatches = await getEventTodayMatches(id)
         setEventInfo(data);
-        console.log("KURWAAAAAAAAA", matches);
+        setCompletedMatches(completedMatches);
+        setTodaysMatches(todayMatches);
+        setParticipants(participants);
+        console.log("KURWAAAAAAAAA", completedMatches);
+        console.log("KURWISKOOOO", participants);
+        
       } catch (err) {
         setError("Nie udało się pobrać danych turnieju.");
         console.error(err); 
@@ -330,30 +265,45 @@ const EventDetails = () => {
                   <div className="flex justify-between items-start mb-4">
                     <div className="flex-1">
                       <div className="flex items-center space-x-4 mb-2">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getRoundColor(match.round)}`}>
-                          {match.round}
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                          Mecz #{match.id}
                         </span>
-                        <span className="text-blue-600 text-sm">{match.court}</span>
+                        {/* <span className="text-blue-600 text-sm">
+                          Kort {venues.find(v => v.id === match.venue_id)?.name || match.venue_id}
+                        </span> */}
                       </div>
                       <div className="text-lg font-semibold text-blue-900">
-                        <span className={match.winner === match.player1 ? 'text-green-600' : ''}>{match.player1}</span>
+                        <span className={match.winner === match.participants[0] ? 'text-green-600' : ''}>
+                          {participants.find(p => p.id === match.participants[0])?.name || `Gracz ${match.participants[0]}`}
+                        </span>
                         <span className="mx-2 text-blue-500">vs</span>
-                        <span className={match.winner === match.player2 ? 'text-green-600' : ''}>{match.player2}</span>
+                        <span className={match.winner === match.participants[1] ? 'text-green-600' : ''}>
+                          {participants.find(p => p.id === match.participants[1])?.name || `Gracz ${match.participants[1]}`}
+                        </span>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-lg font-bold text-blue-900">{match.score}</div>
-                      <div className="text-sm text-green-600 font-medium">Zwycięzca: {match.winner}</div>
+                      <div className="text-lg font-bold text-blue-900">
+                        {match.raport || 'Brak wyniku'}
+                      </div>
+                      {match.winner && (
+                        <div className="text-sm text-green-600 font-medium">
+                          Zwycięzca: {participants.find(p => p.id === match.winner)?.name || `Gracz ${match.winner}`}
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="flex items-center text-sm text-blue-600 space-x-4">
                     <div className="flex items-center">
                       <Calendar className="w-4 h-4 mr-1" />
-                      {match.date}
+                      {match.day}
                     </div>
                     <div className="flex items-center">
                       <Clock className="w-4 h-4 mr-1" />
-                      {match.time}
+                      {match.time_slot}
+                    </div>
+                    <div className="flex items-center text-xs">
+                      Sędziowie: {match.referees.join(', ')}
                     </div>
                   </div>
                 </div>
@@ -402,93 +352,3 @@ const EventDetails = () => {
 };
 
 export default EventDetails;
-
-
-
-
-// import { User, Menu, X } from 'lucide-react';
-// import { useNavigate, useParams } from 'react-router-dom';
-// import { useEffect, useState } from 'react';
-// import { getEvent, getParticipants } from '../services/eventService';
-// import Header from '../components/Header';
-// import { Button, Box, Collapse } from '@mui/material';
-// import CustomTable from '../components/Table/Table';
-
-// const Event = () => {
-//   const navigate = useNavigate();
-//   const [isMenuOpen, setIsMenuOpen] = useState(false);
-//   const [event, setEvent] = useState(null);
-//   const [participants, setParticipants] = useState(null);
-//   const [referees, setReferees] = useState(null);
-//   const { id } = useParams();
-
-//   const fetchEventData = async () => {
-//       try {
-//           console.log(window.location.hostname);
-//           const eventData = await getEvent(id);
-//           setEvent(eventData)
-//           console.log('Fetched event:', eventData);
-
-//           const participantsData = await getParticipants(eventData.participants);
-//           setParticipants(participantsData)
-//           console.log('Fetched participants:', participantsData);
-
-//           // const refereesData = await getReferees(eventData.referees);
-//           // setReferees(refereesData);
-//           // console.log('Fetched referees:', refereesData);
-
-//       } catch (error) {
-//           console.error('Error fetching:', error);
-//       }
-//   };
-
-
-//   useEffect(() => {
-//     fetchEventData();
-//   },[id]);
-
-//   const handleBackClick = () => {
-//     const path = '/events';
-//     // console.log(path);
-//     navigate(path);
-//   };
-
-//   // const navItems = [
-//   //   { path: '/events', label: 'Powrót do wydarzeń' },
-//   // ];
-
-//   if (!event) return <div>Ładowanie danych wydarzenia...</div>;
-
-//   const participantsColumns = [
-//     { header: 'Imię i nazwisko', accessor: 'name' },
-//     { header: 'Email', accessor: 'email' },
-//   ];
-
-//   return (
-//     <div>
-//       <Header title={event.name}/>
-
-//       <Box sx={{ display: 'flex', justifyContent: 'flex-start', margin: '1rem' }}>
-//           <Button 
-//               variant="contained" 
-//               color="primary" 
-//               onClick={() => handleBackClick()}
-//           >
-//             Powrót
-//           </Button>
-//       </Box>
-
-//       <div style={{ padding: '2rem' }}>
-//           <h2>Uczestnicy</h2>
-//           {participants ?
-//             <CustomTable data={participants} columns={participantsColumns} /> 
-//             : 
-//             'Brak uczestnikow'}
-          
-//       </div>
-//     </div>
-
-//   );
-// };
-
-// export default Event;

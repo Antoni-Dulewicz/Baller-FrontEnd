@@ -115,7 +115,12 @@ function App() {
                     } />
                     <Route path="/admin/venues" element={
                         <RoutingPersonalRules allowedRoles={['admin']}>
-                            <Schedule />
+                            <VenuesPage />
+                        </RoutingPersonalRules>
+                    } />
+                    <Route path="/admin/events" element={
+                        <RoutingPersonalRules allowedRoles={['admin']}>
+                            <EventsPage />
                         </RoutingPersonalRules>
                     } />
                 </Routes>
