@@ -82,6 +82,13 @@ function App() {
                             <RefereePage />
                         </RoutingPersonalRules>
                     } />
+
+                    <Route path="/referee/protocols" element={
+                        <RoutingPersonalRules allowedRoles={['referee']}>
+                            <UploadMatchProtocol />
+                        </RoutingPersonalRules>
+                    } />
+
                     <Route path="/matches/referee" element={
                         <RoutingPersonalRules allowedRoles={['referee']}>
                             <MatchList />
