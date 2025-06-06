@@ -3,11 +3,11 @@ import { useAuth } from "../context/AuthContext";
 
 const RoutingPersonalRules = ({ children, allowedRoles }) => {
  
-    const { user } = useAuth();
+    const { userId, role } = useAuth();
 
-    console.log(user)
+    console.log(userId, role)
 
-    if (!user || !allowedRoles.includes(user.role)) {
+    if (!userId || !allowedRoles.includes(role)) {
         return <Navigate to="/login" replace/>;
     }
 

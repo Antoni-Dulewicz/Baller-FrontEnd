@@ -423,7 +423,7 @@ export async function getEventTodayMatches(eventId) {
 
 export async function registerUser( userData, role ) {
   const url = `${API_URL}/api/${role}/register`;
-  console.log(url)
+  // console.log(url)
 
   const response = await fetch(url, {
     method: "POST",
@@ -437,6 +437,29 @@ export async function registerUser( userData, role ) {
 
   if (!response.ok) {
     const type = role == "player" ? "gracza" : role == "referee" ? "sędziego" : "użytkownika o nieznanej roli"   
-    throw new Error(`Nie udało się zarejestrować ${role}: ${response.message}`);
+    throw new Error(`Nie udało się zarejestrować`);
   }
+}
+
+export async function loginUser( userData, role ) {
+  const url = `${API_URL}/api/${role}/login`;
+  
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(userData)
+  })
+
+  console.log(response)
+
+  if (!response.ok) {
+    const type = role == "player" ? "gracza" : role == "referee" ? "sędziego" : role == "admin" ? "admina" : "użytkownika o nieznanej roli"   
+    throw new Error(`Nie udało się zalogować`);
+  }
+
+  const userId = await response.text();
+
+  return userId;
 }

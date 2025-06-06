@@ -34,12 +34,12 @@ function App() {
                     <Route path="/admin" element={<AdminPage/>} />
                     <Route path="/referee" element={<RefereePage/>} />
                     <Route path="/create-tournament" element={<CreateTournament/>} /> */}
-                    {/* <Route path="/tournament" element={<TournamentLadder
+                    <Route path="/tournament" element={<TournamentLadder
                         name = {"Example Tournament Ladder"}
                         place = {"Hala AGH"}
                         date = {"09.05.2025"}
                     />} 
-                    /> */}
+                    />
                     {/* <Route path="/matches/player" element={<MatchList />} />
                     <Route path="/matches/referee" element={<MatchList />} />
                     <Route path="/user" element={<UserPage/>} />
