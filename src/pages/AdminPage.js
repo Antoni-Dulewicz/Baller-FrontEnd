@@ -22,7 +22,7 @@ const AdminPage = () => {
         
               <div className="max-w-7xl mx-auto px-6 py-8">
                   <div className="mb-8">
-                  <h1 className="text-3xl font-bold text-blue-900 mb-6">Ekran sędziego</h1>
+                  <h1 className="text-3xl font-bold text-blue-900 mb-6">Ekran administratora</h1>
                       
                       {/* Tab Navigation */}
                       {/* <button 

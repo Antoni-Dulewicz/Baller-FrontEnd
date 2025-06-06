@@ -14,11 +14,11 @@ const AdminHeader = ({ title }) => {
 
   const navItems = [
     { path: '/admin', label: 'Strona główna' },
-    { path: '/algorithm', label: 'Uruchom scheduling' },
-    { path: '/schedule', label: 'Pokaż Harmonogram'},
-    { path: '/events', label: 'Zarządzaj wydarzeniami' },
-    { path: '/referees', label: 'Zarządzaj sędziami' },
-    { path: '/venues', label: 'Zarządzaj obiektami' },
+    { path: '/admin/algorithm', label: 'Uruchom scheduling' },
+    { path: '/admin/schedule', label: 'Pokaż Harmonogram'},
+    { path: '/admin/events', label: 'Zarządzaj wydarzeniami' },
+    { path: '/admin/referees', label: 'Zarządzaj sędziami' },
+    { path: '/admin/venues', label: 'Zarządzaj obiektami' },
   ];
 
   return (
