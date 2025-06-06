@@ -19,6 +19,8 @@ const RefereePage = () => {
     const [error, setError] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+    const [reportData, setReportData] = useState({ matchId: null, result: '', comment: '' });
 
     
 
@@ -27,7 +29,7 @@ const RefereePage = () => {
     ]
 
 
-    const refereeId = 7;
+    const refereeId = 10;
 
     const fetchEvents = async () => {
         try {
@@ -108,6 +110,34 @@ const RefereePage = () => {
     const handleOpenEventPage = (eventId) => {
         navigate(`/event/${eventId}`);
     }
+
+    const openReportModal = (matchId) => {
+        setReportData({ matchId, result: '', comment: '' });
+        setIsReportModalOpen(true);
+    };
+
+    const handleReportSubmit = () => {
+        setPastMatches(prev =>
+        prev.map(match => {
+            if (match.id === reportData.matchId) {
+                const [scoreA, scoreB] = reportData.result.split('-').map(Number);
+                const [playerA, playerB] = match.participantsNames.split(" vs ");
+                let winner = "Remis";
+                if (scoreA > scoreB) winner = playerA;
+                else if (scoreB > scoreA) winner = playerB;
+
+                return {
+                    ...match,
+                    result: `Wygrana zawodnika ${winner}`,
+                    comment: reportData.comment,
+                    winner
+                };
+            }
+            return match;
+        })
+    );
+    setIsReportModalOpen(false);
+    };
 
     return (
         <div className="min-h-screen bg-blue-50">
@@ -299,6 +329,14 @@ const RefereePage = () => {
                             {venues.find(v => v.id === match.venueId)?.location || "Nieznany obiekt"}
                         </div>
                         </div>
+                        {match.result  === "Brak danych" && (
+                            <button
+                                className="mt-4 w-full bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors"
+                                onClick={() => openReportModal(match.id)}
+                            >
+                                Dodaj raport
+                            </button>
+                        )}
                     </div>
                     ))}
                 </div>
@@ -363,6 +401,45 @@ const RefereePage = () => {
                     >
                         Zamknij
                     </button>
+                    </div>
+                </div>
+            )}
+
+            {isReportModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md text-left">
+                        <h2 className="text-xl font-semibold text-blue-900 mb-4">Dodaj raport do meczu</h2>
+                        
+                        <label className="block text-sm font-medium text-blue-800 mb-1">Wynik (np. 2-1)</label>
+                        <input
+                            type="text"
+                            value={reportData.result}
+                            onChange={(e) => setReportData({ ...reportData, result: e.target.value })}
+                            className="w-full border border-blue-300 rounded-md px-3 py-2 mb-4"
+                        />
+
+                        <label className="block text-sm font-medium text-blue-800 mb-1">Komentarz</label>
+                        <textarea
+                            rows={3}
+                            value={reportData.comment}
+                            onChange={(e) => setReportData({ ...reportData, comment: e.target.value })}
+                            className="w-full border border-blue-300 rounded-md px-3 py-2 mb-4"
+                        />
+
+                        <div className="flex justify-end space-x-3">
+                            <button
+                                onClick={() => setIsReportModalOpen(false)}
+                                className="bg-gray-300 hover:bg-gray-400 text-blue-900 px-4 py-2 rounded-md"
+                            >
+                                Anuluj
+                            </button>
+                            <button
+                                onClick={handleReportSubmit}
+                                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+                            >
+                                Zapisz
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
