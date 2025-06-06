@@ -7,7 +7,9 @@ const RoutingPersonalRules = ({ children, allowedRoles }) => {
 
     console.log(userId, role)
 
+    console.log(allowedRoles)
     if (!userId || !allowedRoles.includes(role)) {
+        console.log(!userId, !allowedRoles.includes(role))
         return <Navigate to="/login" replace/>;
     }
 

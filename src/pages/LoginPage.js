@@ -108,7 +108,7 @@ const LoginPage = () => {
                 }
             }
             else {
-                login({id: "Admin", role: "admin"});
+                login("Admin", "admin");
                 navigate("/admin");
             }
         } catch (error) {
